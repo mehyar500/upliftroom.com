@@ -11,6 +11,7 @@ import {
   deleteProduct,
   listCategories,
 } from './routes/products'
+import { uploadImage, deleteImage } from './routes/upload'
 
 export async function handleRequest(request: Request, env: Env): Promise<Response> {
   // Handle CORS preflight
@@ -30,6 +31,17 @@ export async function handleRequest(request: Request, env: Env): Promise<Respons
   // Admin login
   if (path === '/admin/login') {
     return handleAdminLogin(request, env)
+  }
+
+  // Image upload
+  if (path === '/admin/upload' && request.method === 'POST') {
+    return uploadImage(request, env)
+  }
+
+  // Image delete
+  const deleteMatch = path.match(/^\/admin\/upload\/(.+)$/)
+  if (deleteMatch && request.method === 'DELETE') {
+    return deleteImage(decodeURIComponent(deleteMatch[1]), env)
   }
 
   // Categories

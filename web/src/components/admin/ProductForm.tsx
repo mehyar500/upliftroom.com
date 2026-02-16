@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import ImageUpload from './ImageUpload'
+import MultiImageUpload from './MultiImageUpload'
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://api.upliftroom.com'
 
@@ -23,7 +25,7 @@ interface ProductFormData {
   price_text: string
   sizes: ProductSize[]
   image_cover_path: string
-  image_gallery_paths: string
+  image_gallery_paths: string[] // Changed to array
   lab_report_url: string
   thc_percentage: string
   cbd_percentage: string
@@ -64,7 +66,7 @@ export default function ProductForm({ productId, onSave, onCancel }: ProductForm
     price_text: '',
     sizes: [],
     image_cover_path: '',
-    image_gallery_paths: '',
+    image_gallery_paths: [], // Changed to array
     lab_report_url: '',
     thc_percentage: '',
     cbd_percentage: '',
@@ -117,7 +119,7 @@ export default function ProductForm({ productId, onSave, onCancel }: ProductForm
           price_text: product.price_text || '',
           sizes: product.sizes || [],
           image_cover_path: product.image_cover_path || '',
-          image_gallery_paths: product.image_gallery_paths?.join(', ') || '',
+          image_gallery_paths: product.image_gallery_paths || [], // Already an array
           lab_report_url: product.lab_report_url || '',
           thc_percentage: product.thc_percentage?.toString() || '',
           cbd_percentage: product.cbd_percentage?.toString() || '',
@@ -132,7 +134,7 @@ export default function ProductForm({ productId, onSave, onCancel }: ProductForm
     }
   }
 
-  function handleChange(field: keyof ProductFormData, value: string | boolean | string[]) {
+  function handleChange(field: keyof ProductFormData, value: string | boolean | string[] | ProductSize[]) {
     setFormData(prev => ({ ...prev, [field]: value }))
   }
 
@@ -168,8 +170,8 @@ export default function ProductForm({ productId, onSave, onCancel }: ProductForm
         price_text: formData.price_text || null,
         sizes: formData.sizes.length > 0 ? formData.sizes : [],
         image_cover_path: formData.image_cover_path || null,
-        image_gallery_paths: formData.image_gallery_paths
-          ? formData.image_gallery_paths.split(',').map(t => t.trim()).filter(Boolean)
+        image_gallery_paths: formData.image_gallery_paths.length > 0 
+          ? formData.image_gallery_paths 
           : null,
         lab_report_url: formData.lab_report_url || null,
         thc_percentage: formData.thc_percentage ? parseFloat(formData.thc_percentage) : null,
@@ -375,26 +377,19 @@ export default function ProductForm({ productId, onSave, onCancel }: ProductForm
         </div>
 
         <div>
-          <label className="block text-sm text-gray-300 mb-1">Cover Image Path</label>
-          <input
-            type="text"
+          <ImageUpload
             value={formData.image_cover_path}
-            onChange={(e) => handleChange('image_cover_path', e.target.value)}
-            placeholder="/images/products/product-name.jpg"
-            className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+            onChange={(url) => handleChange('image_cover_path', url)}
+            label="Cover Image *"
           />
         </div>
 
         <div>
-          <label className="block text-sm text-gray-300 mb-1">
-            Gallery Images (comma-separated paths)
-          </label>
-          <input
-            type="text"
+          <MultiImageUpload
             value={formData.image_gallery_paths}
-            onChange={(e) => handleChange('image_gallery_paths', e.target.value)}
-            placeholder="/images/products/img1.jpg, /images/products/img2.jpg"
-            className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+            onChange={(urls) => handleChange('image_gallery_paths', urls)}
+            label="Gallery Images"
+            maxImages={8}
           />
         </div>
 
