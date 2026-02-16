@@ -19,7 +19,7 @@ This project is a monorepo setup for UpliftRoom, featuring a React frontend (Vit
 
 1.  **Clone the repository:**
     ```bash
-    git clone <repo-url>
+    git clone https://github.com/mehyar500/upliftroom.com.git
     cd upliftroom.com
     ```
 
