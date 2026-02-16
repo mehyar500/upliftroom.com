@@ -3,6 +3,7 @@ import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
 import ProductsPage from './pages/ProductsPage'
 import LatestPage from './pages/LatestPage'
+import MenuPage from './pages/MenuPage'
 import PrivacyPage from './pages/PrivacyPage'
 import AboutPage from './pages/AboutPage'
 import AdminLogin from './components/AdminLogin'
@@ -38,6 +39,7 @@ function App() {
       <Route path="/" element={<Layout><HomePage /></Layout>} />
       <Route path="/products" element={<Layout><ProductsPage /></Layout>} />
       <Route path="/latest" element={<Layout><LatestPage /></Layout>} />
+      <Route path="/menu" element={<Layout><MenuPage /></Layout>} />
       <Route path="/privacy" element={<Layout><PrivacyPage /></Layout>} />
       <Route path="/terms" element={<Layout><PrivacyPage /></Layout>} />
       <Route path="/about" element={<Layout><AboutPage /></Layout>} />
