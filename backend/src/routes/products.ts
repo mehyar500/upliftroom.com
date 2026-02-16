@@ -26,10 +26,24 @@ export async function getProductById(id: string, env: Env): Promise<Response> {
 // GET /products - List all active products (public)
 export async function listProducts(request: Request, env: Env): Promise<Response> {
   const url = new URL(request.url)
-  const category = url.searchParams.get('category')
+  const categorySlug = url.searchParams.get('category')
   const featured = url.searchParams.get('featured')
   
   const supabase = getSupabaseClient(env)
+  
+  // If filtering by category, first get the category ID
+  let categoryId: string | null = null
+  if (categorySlug) {
+    const { data: categoryData } = await supabase
+      .from('categories')
+      .select('id')
+      .eq('slug', categorySlug)
+      .single()
+    
+    if (categoryData) {
+      categoryId = categoryData.id
+    }
+  }
   
   let query = supabase
     .from('products')
@@ -38,8 +52,8 @@ export async function listProducts(request: Request, env: Env): Promise<Response
     .order('sort_order', { ascending: true })
     .order('created_at', { ascending: false })
   
-  if (category) {
-    query = query.eq('categories.slug', category)
+  if (categoryId) {
+    query = query.eq('category_id', categoryId)
   }
   
   if (featured === 'true') {

@@ -12,6 +12,7 @@ import {
   listCategories,
 } from './routes/products'
 import { uploadImage, deleteImage } from './routes/upload'
+import { getRSSItems, fetchRSS } from './routes/rss'
 
 export async function handleRequest(request: Request, env: Env): Promise<Response> {
   // Handle CORS preflight
@@ -78,6 +79,16 @@ export async function handleRequest(request: Request, env: Env): Promise<Respons
   // Admin Products - Delete
   if (adminProductMatch && request.method === 'DELETE') {
     return deleteProduct(adminProductMatch[1], env)
+  }
+
+  // RSS Items - Public
+  if (path === '/rss/items' && request.method === 'GET') {
+    return getRSSItems(request, env)
+  }
+
+  // Admin RSS - Fetch
+  if (path === '/admin/rss/fetch' && request.method === 'POST') {
+    return fetchRSS(env)
   }
 
   return jsonResponse({ error: 'Not found', path }, 404)

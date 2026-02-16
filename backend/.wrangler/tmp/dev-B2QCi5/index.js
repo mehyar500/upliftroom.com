@@ -1,7 +1,7 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
-// .wrangler/tmp/bundle-7UVCZt/checked-fetch.js
+// .wrangler/tmp/bundle-YfAsej/checked-fetch.js
 var urls = /* @__PURE__ */ new Set();
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
@@ -11966,12 +11966,19 @@ async function getProductById(id, env) {
 __name(getProductById, "getProductById");
 async function listProducts(request, env) {
   const url = new URL(request.url);
-  const category = url.searchParams.get("category");
+  const categorySlug = url.searchParams.get("category");
   const featured = url.searchParams.get("featured");
   const supabase = getSupabaseClient(env);
+  let categoryId = null;
+  if (categorySlug) {
+    const { data: categoryData } = await supabase.from("categories").select("id").eq("slug", categorySlug).single();
+    if (categoryData) {
+      categoryId = categoryData.id;
+    }
+  }
   let query = supabase.from("products").select("*, categories(name, slug)").eq("is_active", true).order("sort_order", { ascending: true }).order("created_at", { ascending: false });
-  if (category) {
-    query = query.eq("categories.slug", category);
+  if (categoryId) {
+    query = query.eq("category_id", categoryId);
   }
   if (featured === "true") {
     query = query.eq("is_featured", true);
@@ -12415,7 +12422,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-7UVCZt/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-YfAsej/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -12447,7 +12454,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-7UVCZt/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-YfAsej/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

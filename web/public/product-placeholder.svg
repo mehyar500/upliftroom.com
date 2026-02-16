@@ -1,0 +1,44 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <rect width="400" height="400" fill="url(#gradient)"/>
+  
+  <!-- Geometric pattern -->
+  <circle cx="200" cy="200" r="120" stroke="url(#stroke-gradient)" stroke-width="2" opacity="0.3"/>
+  <circle cx="200" cy="200" r="90" stroke="url(#stroke-gradient)" stroke-width="2" opacity="0.4"/>
+  <circle cx="200" cy="200" r="60" stroke="url(#stroke-gradient)" stroke-width="2" opacity="0.5"/>
+  
+  <!-- Center icon -->
+  <g transform="translate(200, 200)">
+    <path d="M-30,-40 L-30,20 C-30,35 -15,40 0,40 C15,40 30,35 30,20 L30,-40 Z" 
+          fill="url(#icon-gradient)" opacity="0.6"/>
+    <ellipse cx="0" cy="-40" rx="30" ry="10" fill="url(#icon-gradient)" opacity="0.6"/>
+    <circle cx="-15" cy="0" r="8" fill="white" opacity="0.3"/>
+    <circle cx="15" cy="0" r="8" fill="white" opacity="0.3"/>
+    <circle cx="0" cy="20" r="8" fill="white" opacity="0.3"/>
+  </g>
+  
+  <!-- Decorative elements -->
+  <circle cx="100" cy="100" r="4" fill="white" opacity="0.2"/>
+  <circle cx="300" cy="100" r="4" fill="white" opacity="0.2"/>
+  <circle cx="100" cy="300" r="4" fill="white" opacity="0.2"/>
+  <circle cx="300" cy="300" r="4" fill="white" opacity="0.2"/>
+  
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.2" />
+      <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:0.2" />
+    </linearGradient>
+    
+    <linearGradient id="stroke-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="icon-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0.8" />
+    </linearGradient>
+  </defs>
+</svg>

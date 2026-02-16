@@ -42,19 +42,19 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center p-4">
-      <div className="bg-gray-900 border border-gray-800 rounded-lg shadow-xl w-full max-w-sm p-6 space-y-4">
-        <h1 className="text-2xl font-semibold">Admin Login</h1>
+    <div className="min-h-[calc(100vh-16rem)] flex items-center justify-center px-4 py-12">
+      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xl w-full max-w-md p-8">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Admin Login</h1>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm text-gray-300 mb-1" htmlFor="username">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" htmlFor="username">
               Username
             </label>
             <input
               id="username"
               type="text"
-              className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               autoComplete="username"
@@ -63,13 +63,13 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
           </div>
 
           <div>
-            <label className="block text-sm text-gray-300 mb-1" htmlFor="password">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" htmlFor="password">
               Password
             </label>
             <input
               id="password"
               type="password"
-              className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
@@ -78,14 +78,14 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
           </div>
 
           {errorMessage && (
-            <div className="text-sm text-red-300 bg-red-900/30 border border-red-800 rounded p-2">
+            <div className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
               {errorMessage}
             </div>
           )}
 
           <button
             type="submit"
-            className="w-full rounded bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 text-sm font-medium transition-colors"
+            className="w-full rounded-lg bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-3 text-white font-semibold transition-all transform hover:scale-[1.02]"
             disabled={loading}
           >
             {loading ? 'Signing in...' : 'Sign in'}
