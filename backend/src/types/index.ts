@@ -13,3 +13,5 @@ export interface RateLimitResult {
   allowed: boolean
   count: number
 }
+
+export * from './product'
