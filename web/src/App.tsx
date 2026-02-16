@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import type { FormEvent } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
+import AdminLogin from './components/AdminLogin'
+import AdminDashboard from './components/AdminDashboard'
 import './index.css'
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://api.upliftroom.com'
@@ -10,13 +11,6 @@ interface HealthResponse {
   timestamp: string
   requests_today: number
   supabase: string
-  message?: string
-}
-
-interface LoginResponse {
-  status: string
-  authenticated?: boolean
-  username?: string
   message?: string
 }
 
@@ -38,9 +32,9 @@ function StatusPage() {
           setConnectionStatus('error')
           setErrorMessage(data.message || `Status: ${data.status}`)
         }
-      } catch (err: any) {
+      } catch (err) {
         setConnectionStatus('error')
-        setErrorMessage(err.message || 'Failed to reach backend')
+        setErrorMessage(err instanceof Error ? err.message : 'Failed to reach backend')
       }
     }
 
@@ -101,102 +95,29 @@ function StatusPage() {
   )
 }
 
-function AdminLoginPage() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+function AdminPage() {
   const [authenticatedUser, setAuthenticatedUser] = useState<string | null>(null)
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setLoading(true)
-    setErrorMessage(null)
-
-    try {
-      const response = await fetch(`${API_URL}/admin/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      })
-
-      const data: LoginResponse = await response.json()
-
-      if (!response.ok || data.status !== 'ok' || !data.authenticated) {
-        setAuthenticatedUser(null)
-        setErrorMessage(data.message || 'Invalid credentials')
-        return
-      }
-
-      setAuthenticatedUser(data.username || username)
-    } catch (error: any) {
-      setAuthenticatedUser(null)
-      setErrorMessage(error.message || 'Login request failed')
-    } finally {
-      setLoading(false)
-    }
+  function handleLoginSuccess(username: string) {
+    setAuthenticatedUser(username)
   }
 
-  return (
-    <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center p-4">
-      <div className="bg-gray-900 border border-gray-800 rounded-lg shadow-xl w-full max-w-sm p-6 space-y-4">
-        <h1 className="text-2xl font-semibold">Admin Login</h1>
+  function handleLogout() {
+    setAuthenticatedUser(null)
+  }
 
-        {authenticatedUser ? (
-          <div className="rounded border border-green-800 bg-green-950/50 p-4 text-green-300">
-            <p className="font-semibold">athintiacted</p>
-            <p className="text-sm mt-1">{authenticatedUser}</p>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-3">
-            <div>
-              <label className="block text-sm text-gray-300 mb-1" htmlFor="username">Username</label>
-              <input
-                id="username"
-                className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm focus:outline-none"
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
-                autoComplete="username"
-              />
-            </div>
+  if (authenticatedUser) {
+    return <AdminDashboard username={authenticatedUser} onLogout={handleLogout} />
+  }
 
-            <div>
-              <label className="block text-sm text-gray-300 mb-1" htmlFor="password">Password</label>
-              <input
-                id="password"
-                type="password"
-                className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-sm focus:outline-none"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                autoComplete="current-password"
-              />
-            </div>
-
-            {errorMessage && (
-              <p className="text-sm text-red-300">{errorMessage}</p>
-            )}
-
-            <button
-              type="submit"
-              className="w-full rounded bg-blue-600 hover:bg-blue-500 disabled:opacity-50 px-4 py-2 text-sm font-medium"
-              disabled={loading}
-            >
-              {loading ? 'Signing in...' : 'Sign in'}
-            </button>
-          </form>
-        )}
-      </div>
-    </div>
-  )
+  return <AdminLogin onLoginSuccess={handleLoginSuccess} />
 }
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<StatusPage />} />
-      <Route path="/admin" element={<AdminLoginPage />} />
+      <Route path="/admin" element={<AdminPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
