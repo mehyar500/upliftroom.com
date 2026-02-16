@@ -1,0 +1,19 @@
+{
+    "name": "backend",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "wrangler dev",
+        "deploy": "wrangler deploy",
+        "tail": "wrangler tail"
+    },
+    "dependencies": {
+        "@supabase/supabase-js": "^2.95.3"
+    },
+    "devDependencies": {
+        "@cloudflare/workers-types": "^4.20240208.0",
+        "typescript": "~5.9.3",
+        "wrangler": "^4.65.0"
+    }
+}

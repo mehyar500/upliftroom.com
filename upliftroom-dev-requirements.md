@@ -74,28 +74,6 @@ Edge Functions → Supabase (Service role)
 
 ---
 
-# 3. DIRECTORY STRUCTURE (RECOMMENDED)
-
-src/
-  components/
-  pages/
-  layouts/
-  features/
-    products/
-    blog/
-    rss/
-    newsletter/
-    admin/
-  lib/
-    supabase.ts
-    validation.ts
-    lint.ts
-  hooks/
-  types/
-  styles/
-
----
-
 # 4. DATABASE SCHEMA (FULL)
 
 ## products
@@ -388,11 +366,13 @@ Gallery:
 
 .env.example
 
-VITE_SUPABASE_URL=https://project.supabase.co
-VITE_SUPABASE_ANON_KEY=public_key
-VITE_TURNSTILE_SITE_KEY=site_key
+VITE_SUPABASE_URL=https://hnjtgbshpsnylccfvutz.supabase.co
+VITE_SUPABASE_ANON_KEY=sb_publishable_MyfMEPRN00T0rrRQP2A5MQ_0hwE-hh4
 VITE_ENABLE_RSS=true
 VITE_ENABLE_NEWSLETTER=true
+CLOUDFLARE_ACCOUNT_ID=73297e9019ac926f860a4496636e01e3
+CLOUDFLARE_API_TOKEN=W6MXDIQlxA6piE9YDO4fgjrAJ9KrfHZfayHgS0WK
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuanRnYnNocHNueWxjY2Z2dXR6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MTI1NTQ1MiwiZXhwIjoyMDg2ODMxNDUyfQ.jIdSU3iiJE98WZQQa4SyPXjLga5gnqP-fzMpuUiJeGo
 
 Server-side secrets not exposed to frontend.
 
