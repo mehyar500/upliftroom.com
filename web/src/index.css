@@ -1,11 +1,9 @@
 @import "tailwindcss";
 
-@theme {
-  /* Enable dark mode with class strategy */
-  --color-*: initial;
-}
+/* Tailwind v4 dark mode via .dark class on <html> */
+@custom-variant dark (&:where(.dark, .dark *));
 
-/* Global resets and spacing */
+/* Global resets */
 * {
   margin: 0;
   padding: 0;
@@ -20,26 +18,6 @@ body {
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.6;
-}
-
-/* Global spacing for typography */
-h1, h2, h3, h4, h5, h6 {
-  margin-bottom: 0.75rem;
-  line-height: 1.3;
-}
-
-p {
-  margin-bottom: 1rem;
-}
-
-ul, ol {
-  margin-bottom: 1rem;
-  padding-left: 1.5rem;
-}
-
-li {
-  margin-bottom: 0.5rem;
 }
 
 a {
@@ -53,15 +31,6 @@ button {
 img {
   max-width: 100%;
   height: auto;
-}
-
-/* Spacing utilities */
-.section-spacing {
-  margin-bottom: 2rem;
-}
-
-.content-spacing > * + * {
-  margin-top: 1rem;
 }
 
 #root {
