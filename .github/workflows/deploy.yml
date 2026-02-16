@@ -38,7 +38,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: upliftroom # Ensure this matches your Cloudflare Pages project name
+          projectName: upliftroom-web # Ensure this matches your Cloudflare Pages project name
           directory: web/dist
           # Optional: Enable if you want GitHub Deployments integration
           # gitHubToken: ${{ secrets.GITHUB_TOKEN }}

@@ -8,7 +8,8 @@
     "scripts": {
         "dev": "npm run dev --workspace=web",
         "build": "npm run build --workspace=web",
-        "lint": "npm run lint --workspace=web"
+        "lint": "npm run lint --workspace=web",
+        "deploy": "npm run build --workspace=web && npx wrangler pages deploy web/dist --project-name upliftroom-web --branch main --commit-dirty=true"
     },
     "devDependencies": {
         "concurrently": "^8.2.2"
