@@ -7,9 +7,12 @@
     ],
     "scripts": {
         "dev": "npm run dev --workspace=web",
+        "dev:backend": "npm run dev --workspace=backend",
         "build": "npm run build --workspace=web",
         "lint": "npm run lint --workspace=web",
-        "deploy": "npm run build --workspace=web && npx wrangler pages deploy web/dist --project-name upliftroom-web --branch main --commit-dirty=true"
+        "deploy": "npm run deploy:web && npm run deploy:backend",
+        "deploy:web": "npm run build --workspace=web && npx wrangler pages deploy web/dist --project-name upliftroom-web --branch main --commit-dirty=true",
+        "deploy:backend": "npx wrangler deploy --config backend/wrangler.toml"
     },
     "devDependencies": {
         "concurrently": "^8.2.2"

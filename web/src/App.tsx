@@ -1,34 +1,41 @@
 import { useEffect, useState } from 'react'
-import { supabase } from './lib/supabase'
 import './index.css'
 
+const API_URL = import.meta.env.VITE_API_URL || 'https://api.upliftroom.com'
+
+interface HealthResponse {
+  status: string
+  timestamp: string
+  requests_today: number
+  supabase: string
+  message?: string
+}
+
 function App() {
+  const [health, setHealth] = useState<HealthResponse | null>(null)
   const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'error'>('checking')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   useEffect(() => {
-    async function checkConnection() {
+    async function checkHealth() {
       try {
-        const { error } = await supabase.from('site_settings').select('count', { count: 'exact', head: true })
-        if (error && error.code !== 'PGRST116' && error.code !== '42P01') { // Ignore "relation does not exist" or "no rows" as success connection
-          // Actually, if table doesn't exist, it returns 42P01 (undefined_table). This means we connected but table is missing. 
-          // That demands we allow 42P01 as a "connected" state for now.
-          if (error.code === '42P01') {
-            console.log('Connected to Supabase (Table site_settings missing, but connection worked)')
-            setConnectionStatus('connected')
-            return
-          }
-          throw error
+        const res = await fetch(`${API_URL}/health`)
+        const data: HealthResponse = await res.json()
+
+        if (res.ok && data.status === 'ok') {
+          setConnectionStatus('connected')
+          setHealth(data)
+        } else {
+          setConnectionStatus('error')
+          setErrorMessage(data.message || `Status: ${data.status}`)
         }
-        setConnectionStatus('connected')
       } catch (err: any) {
-        console.error('Supabase connection error:', err)
         setConnectionStatus('error')
-        setErrorMessage(err.message || 'Unknown error')
+        setErrorMessage(err.message || 'Failed to reach backend')
       }
     }
 
-    checkConnection()
+    checkHealth()
   }, [])
 
   return (
@@ -50,7 +57,7 @@ function App() {
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-gray-300">Backend (Supabase):</span>
+            <span className="text-gray-300">Backend (Worker):</span>
             <span className={`font-mono px-2 py-1 rounded text-sm ${connectionStatus === 'connected' ? 'bg-green-900 text-green-300' :
                 connectionStatus === 'error' ? 'bg-red-900 text-red-300' :
                   'bg-yellow-900 text-yellow-300'
@@ -60,11 +67,19 @@ function App() {
             </span>
           </div>
 
+          {health && connectionStatus === 'connected' && (
+            <div className="mt-2 p-3 bg-green-900/30 border border-green-800 rounded text-sm text-green-200 space-y-1">
+              <p><span className="text-gray-400">Supabase:</span> {health.supabase}</p>
+              <p><span className="text-gray-400">Requests Today:</span> {health.requests_today}</p>
+              <p><span className="text-gray-400">Timestamp:</span> {health.timestamp}</p>
+            </div>
+          )}
+
           {connectionStatus === 'error' && (
             <div className="mt-4 p-3 bg-red-900/50 border border-red-700 rounded text-sm text-red-200">
               <p className="font-bold">Connection Failed:</p>
               <p>{errorMessage}</p>
-              <p className="mt-2 text-xs opacity-75">Check your .env file and ensure Supabase URL/Key are correct.</p>
+              <p className="mt-2 text-xs opacity-75">Check that the backend Worker is deployed and accessible.</p>
             </div>
           )}
         </div>
