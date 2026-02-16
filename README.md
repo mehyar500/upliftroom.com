@@ -1,113 +1,101 @@
-# UpliftRoom - Cannabis Lifestyle Website
+# UpliftRoom
 
-This project is a monorepo setup for UpliftRoom, featuring a React frontend (Vite) hosted on Cloudflare Pages and a Supabase backend.
+Cannabis lifestyle web application built with React (Cloudflare Pages) and a Cloudflare Worker backend connected to Supabase.
 
 ## Project Structure
 
-- `web/`: Frontend application (React + Vite + TypeScript)
-- `backend/`: Supabase configuration and migrations (to be initialized)
+```
+upliftroom.com/
+├── web/              # Frontend — Vite + React + TypeScript + Tailwind CSS v4
+├── backend/          # Backend  — Cloudflare Worker + Supabase
+│   └── supabase/     # SQL migrations
+├── .github/workflows # CI/CD — auto-deploy on push to main
+├── package.json      # Root scripts for dev & deploy
+└── .env.example      # Environment variable template
+```
 
-## Getting Started
+## Prerequisites
 
-### Prerequisites
+- **Node.js** ≥ 18
+- **npm** ≥ 9
+- A [Supabase](https://supabase.com) project
+- A [Cloudflare](https://cloudflare.com) account
 
-- Node.js (v18+)
-- NPM
-- Supabase CLI (optional, but recommended for local dev)
+## Setup
 
-### Setup
+1. **Clone the repo:**
+   ```bash
+   git clone https://github.com/mehyar500/upliftroom.com.git
+   cd upliftroom.com
+   ```
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/mehyar500/upliftroom.com.git
-    cd upliftroom.com
-    ```
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+3. **Configure environment variables:**
 
-3.  **Environment Variables:**
-    -   Copy `.env.example` to `web/.env` (create the file inside `web/` directory).
-    -   Fill in your Supabase credentials.
-    ```bash
-    cp .env.example web/.env
-    ```
+   Copy the example and fill in your values:
+   ```bash
+   cp .env.example web/.env
+   ```
 
-4.  **Run Development Server:**
-    ```bash
-    npm run dev
-    ```
-    This will start the frontend development server.
+   For the backend, set secrets via Wrangler:
+   ```bash
+   npx wrangler secret put SUPABASE_URL --name upliftroom-api
+   npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY --name upliftroom-api
+   ```
 
-## Deployment to Cloudflare Pages
+4. **Run the database migration:**
 
-This repository is configured to deploy to Cloudflare Pages via GitHub Actions (or automatic Cloudflare integration).
+   Go to your Supabase Dashboard → SQL Editor and run the contents of:
+   ```
+   backend/supabase/migrations/20240216000000_create_daily_users.sql
+   ```
 
-### Manual Setup via Cloudflare Dashboard
+## Local Development
 
-1.  Log in to Cloudflare Dashboard > Workers & Pages > Create Application > Pages > Connect to Git.
-2.  Select this repository.
-3.  **Build Settings:**
-    -   **Framework Preset:** Vite
-    -   **Build Command:** `npm run build`
-    -   **Build Output Directory:** `dist`
-    -   **Root Directory:** `web` (IMPORTANT: Set this to `web`)
-4.  **Environment Variables:**
-    -   Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in the Cloudflare Pages settings.
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start frontend dev server (Vite) |
+| `npm run dev:backend` | Start backend Worker locally (Wrangler) |
+| `npm run dev:all` | Start both frontend + backend concurrently |
 
-### Manual Deployment via CLI (Wrangler)
+The frontend runs at `http://localhost:5173` and the backend at `http://localhost:8787`.
 
-If you prefer to deploy manually or want to initialize the project from your local machine:
+## Deployment
 
-1.  **Set Environment Variables:**
-    Ensure you have `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` set in your terminal or usage environment.
+Set your Cloudflare credentials before deploying:
+```bash
+export CLOUDFLARE_API_TOKEN=your-token
+export CLOUDFLARE_ACCOUNT_ID=your-account-id
+```
 
-2.  **Create Project (First Time Only):**
-    ```bash
-    npx wrangler pages project create upliftroom-web --production-branch main
-    ```
+| Command | Description |
+|---------|-------------|
+| `npm run deploy` | Deploy both frontend + backend |
+| `npm run deploy:web` | Build + deploy frontend to Cloudflare Pages |
+| `npm run deploy:backend` | Deploy backend Worker to Cloudflare |
 
-3.  **Upload Secrets:**
-    ```bash
-    # Replace values with your actual keys
-    echo '{"VITE_SUPABASE_URL":"your_url","VITE_SUPABASE_ANON_KEY":"your_key"}' | npx wrangler pages secret bulk --project-name upliftroom-web
-    ```
+### Live URLs
 
-4.  **Deploy (from Root):**
-    ```bash
-    npm run deploy
-    ```
-    This script builds the `web` workspace and deploys it to Cloudflare Pages using `wrangler`.
+| Service | URL |
+|---------|-----|
+| Frontend | [upliftroom.com](https://upliftroom.com) |
+| Backend API | [api.upliftroom.com](https://api.upliftroom.com/health) |
 
-### Via GitHub Actions (Automated)
+### CI/CD
 
-A `.github/workflows/deploy.yml` is included. To use it:
+Pushing to `main` automatically deploys the frontend via GitHub Actions. Make sure the following secrets are set in your GitHub repo settings:
 
-1.  Get your Cloudflare Account ID and API Token.
-    -   **Account ID:** Found in the Cloudflare Dashboard URL or sidebar.
-    -   **API Token:** User Profile > API Tokens > Create Token > Template: "Edit Cloudflare Workers".
-2.  Add secrets to your GitHub Repository (Settings > Secrets and variables > Actions):
-    -   `CLOUDFLARE_ACCOUNT_ID`
-    -   `CLOUDFLARE_API_TOKEN`
-3.  Push to `main` branch.
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`
 
-## Cloudflare Token Permissions
+### Cloudflare API Token Permissions
 
-To fully manage the project (Pages, Workers, AI, DNS) via API/GitHub Actions, create a token with the following permissions:
-
-1.  Go to **User Profile** > **API Tokens** > **Create Token**.
-2.  Select **Create Custom Token** at the bottom.
-3.  **Token Name**: e.g., "UpliftRoom Deploy".
-4.  **Permissions**:
-    -   **Account** > **Cloudflare Pages** > **Edit**
-    -   **Account** > **Workers Scripts** > **Edit**
-    -   **Account** > **Workers AI** > **Read** (or Edit)
-    -   **Zone** > **DNS** > **Edit**
-    -   **Zone** > **Zone** > **Read**
-5.  **Account Resources**: Select "Include" > "All accounts" (or your specific account).
-6.  **Zone Resources**: Select "Include" > "All zones" (or your specific zone).
-7.  Click **Continue to Summary** > **Create Token**.
-
-Copy this token immediately. This is your `CLOUDFLARE_API_TOKEN`.
+When creating your token, include:
+- **Cloudflare Pages** — Edit
+- **Workers Scripts** — Edit
+- **DNS** — Edit
+- **Zone** — Read
