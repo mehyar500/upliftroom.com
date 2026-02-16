@@ -18,16 +18,6 @@ body {
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-<<<<<<< codex/fix-ui-color-scheme-and-spacing-issues-9asrym
-  background-color: #f8fafc;
-  color: #0f172a;
-}
-
-html.dark body {
-  background-color: #020617;
-  color: #f8fafc;
-=======
->>>>>>> master
 }
 
 a {
