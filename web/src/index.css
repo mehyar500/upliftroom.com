@@ -181,6 +181,7 @@ img {
   border-radius: var(--radius-lg);
   transition: all var(--transition-default);
   overflow: visible;
+  box-shadow: var(--shadow-sm);
 }
 
 .card:hover {

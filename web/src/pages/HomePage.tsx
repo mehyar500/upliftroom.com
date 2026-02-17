@@ -47,7 +47,7 @@ const spotlightTiles: Tile[] = [
 const guides = [
   {
     title: 'Know Your Product Types',
-    excerpt: 'Flower, vapes, edibles, concentrates \u2014 understand each format and what to expect.',
+    excerpt: 'Flower, vapes, edibles, concentrates — understand each format and what to expect.',
   },
   {
     title: 'Session Design 101',
@@ -65,7 +65,8 @@ function SpotlightCard({ tile }: { tile: Tile }) {
   return (
     <Link
       to={tile.to}
-      className={`card group relative p-6 md:p-8 flex flex-col justify-between min-h-[200px] ${tile.span ?? ''}`}
+      className={`card group relative flex flex-col justify-between min-h-[220px] ${tile.span ?? ''}`}
+      style={{ padding: '28px 28px 24px' }}
     >
       <div>
         <span className={`badge mb-4 ${isArticle ? 'badge-accent' : 'badge-cyan'}`}>
@@ -94,7 +95,7 @@ export default function HomePage() {
 
   return (
     <div>
-      <section className="relative overflow-hidden page-section" style={{ paddingTop: '100px', paddingBottom: '100px' }}>
+      <section className="relative overflow-hidden" style={{ paddingTop: '100px', paddingBottom: '100px' }}>
         <div className="absolute inset-0">
           <img
             src="/images/hero-gradient.png"
@@ -151,17 +152,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="page-section">
+      <section style={{ padding: '64px 0' }}>
         <div className="container">
-          <div className="flex items-end justify-between gap-4 mb-8">
-            <h2 className="section-title" style={{ textAlign: 'left' }}>Curated for You</h2>
-            <Link
-              to="/latest"
-              className="text-sm font-semibold transition-opacity hover:opacity-70 hidden sm:block"
-              style={{ color: 'var(--color-accent)' }}
-            >
-              View all &rarr;
-            </Link>
+          <div className="text-center mb-10">
+            <h2 className="section-title mb-3">Curated for You</h2>
+            <p className="section-subtitle mx-auto" style={{ maxWidth: '480px' }}>
+              Handpicked products and reads based on what people love right now.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -169,19 +166,31 @@ export default function HomePage() {
               <SpotlightCard key={tile.title} tile={tile} />
             ))}
           </div>
+
+          <div className="text-center mt-8">
+            <Link
+              to="/products"
+              className="text-sm font-semibold transition-opacity hover:opacity-70 inline-flex items-center gap-1"
+              style={{ color: 'var(--color-accent)' }}
+            >
+              View all products &rarr;
+            </Link>
+          </div>
         </div>
       </section>
 
-      <section className="page-section" style={{ background: 'var(--color-bg-secondary)' }}>
+      <section style={{ padding: '64px 0', background: 'var(--color-bg-secondary)' }}>
         <div className="container">
-          <h2 className="section-title text-center mb-4">Learn &amp; Discover</h2>
-          <p className="section-subtitle text-center mb-10 mx-auto" style={{ maxWidth: '500px' }}>
-            Guides, culture, and everything you need to make informed choices.
-          </p>
+          <div className="text-center mb-10">
+            <h2 className="section-title mb-3">Learn &amp; Discover</h2>
+            <p className="section-subtitle mx-auto" style={{ maxWidth: '500px' }}>
+              Guides, culture, and everything you need to make informed choices.
+            </p>
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             {guides.map(item => (
-              <article key={item.title} className="card p-6 md:p-8">
+              <article key={item.title} className="card" style={{ padding: '28px 28px 24px' }}>
                 <h3
                   className="text-lg font-semibold mb-3"
                   style={{ color: 'var(--color-text)', letterSpacing: '-0.02em' }}
@@ -204,11 +213,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="page-section">
+      <section style={{ padding: '64px 0' }}>
         <div className="container">
           <div
-            className="rounded-3xl p-10 md:p-16 text-center relative overflow-hidden"
+            className="rounded-3xl text-center relative overflow-hidden"
             style={{
+              padding: '56px 32px',
               background: 'linear-gradient(135deg, rgba(124,58,237,0.08), rgba(6,182,212,0.08), rgba(34,197,94,0.05))',
               border: '1px solid var(--color-border)',
             }}
