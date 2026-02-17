@@ -152,7 +152,7 @@ export default function HomePage() {
       <section className="page-section">
         <div className="container">
           <div className="flex items-end justify-between gap-4 mb-8">
-            <h2 className="section-title">Curated for You</h2>
+            <h2 className="section-title" style={{ textAlign: 'left' }}>Curated for You</h2>
             <Link
               to="/latest"
               className="text-sm font-semibold transition-opacity hover:opacity-70 hidden sm:block"

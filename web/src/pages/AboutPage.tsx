@@ -57,7 +57,7 @@ export default function AboutPage() {
 
         <div className="space-y-5">
           {sections.map(section => (
-            <div key={section.title} className="card p-6 md:p-8">
+            <div key={section.title} className="card p-8 md:p-10">
               <h2
                 className="text-xl font-semibold mb-4"
                 style={{ color: 'var(--color-text)', letterSpacing: '-0.02em' }}

@@ -196,7 +196,7 @@ export default function LatestPage() {
                 )}
               </div>
               
-              <div className="p-5">
+              <div className="p-6">
                 <div className="flex items-center gap-2 text-xs mb-3" style={{ color: 'var(--color-text-tertiary)' }}>
                   <span style={{ color: 'var(--color-accent)' }}>{item.rss_sources.name}</span>
                   <span>&middot;</span>
