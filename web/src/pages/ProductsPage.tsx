@@ -35,19 +35,46 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto"
-      style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-y-auto"
+      style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
     >
       <div
-        className="w-full max-w-[680px] my-8 mx-4 rounded-2xl overflow-hidden animate-[slideUp_0.3s_ease-out]"
-        style={{ background: 'var(--color-bg-elevated)', boxShadow: 'var(--shadow-xl)' }}
+        className="w-full max-w-[560px] rounded-3xl overflow-hidden animate-[slideUp_0.3s_ease-out] relative"
+        style={{ background: 'var(--color-bg-elevated)', boxShadow: '0 25px 60px rgba(0,0,0,0.3)' }}
       >
-        <div
-          className="sticky top-0 z-10 flex items-center justify-between px-6 py-4"
-          style={{ background: 'var(--color-bg-elevated)', borderBottom: '1px solid var(--color-border)' }}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 z-20 w-8 h-8 flex items-center justify-center rounded-full transition-all hover:scale-110"
+          style={{ background: 'var(--color-bg-elevated)', color: 'var(--color-text-secondary)', boxShadow: 'var(--shadow-md)' }}
         >
-          <div className="flex items-center gap-2">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <div
+          className="aspect-[16/9] overflow-hidden relative flex items-center justify-center"
+          style={{ background: 'var(--color-bg-secondary)' }}
+        >
+          {product.image_cover_path ? (
+            <img
+              src={product.image_cover_path}
+              alt={product.name}
+              className="w-full h-full object-cover"
+              onError={(e) => { e.currentTarget.style.display = 'none' }}
+            />
+          ) : (
+            <div className="flex flex-col items-center gap-3 opacity-30">
+              <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: 'var(--color-text-tertiary)' }}>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+              </svg>
+            </div>
+          )}
+        </div>
+
+        <div style={{ padding: '28px 32px 32px' }}>
+          <div className="flex items-center gap-2 mb-4 flex-wrap">
             {product.categories && (
               <span className="badge badge-cyan capitalize">{product.categories.name}</span>
             )}
@@ -55,21 +82,8 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
               <span className="badge badge-accent capitalize">{product.profile}</span>
             )}
           </div>
-          <button onClick={onClose} className="p-2 rounded-full hover:opacity-70 transition-opacity" style={{ color: 'var(--color-text-secondary)' }}>
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
 
-        {product.image_cover_path && (
-          <div className="aspect-[4/3] overflow-hidden" style={{ background: 'var(--color-bg-secondary)' }}>
-            <img src={product.image_cover_path} alt={product.name} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.src = '/product-placeholder.svg' }} />
-          </div>
-        )}
-
-        <div className="px-6 py-8 md:px-10">
-          <h1 className="text-2xl md:text-3xl font-bold mb-2" style={{ color: 'var(--color-text)', letterSpacing: '-0.03em' }}>
+          <h1 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text)', letterSpacing: '-0.03em', lineHeight: 1.2 }}>
             {product.name}
           </h1>
 
@@ -77,20 +91,20 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
             <p className="text-lg font-semibold mb-4 gradient-text">{product.price_text}</p>
           )}
 
-          <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--color-text-secondary)' }}>
+          <p className="text-sm leading-relaxed mb-5" style={{ color: 'var(--color-text-secondary)' }}>
             {product.short_description}
           </p>
 
           {(product.intensity || product.strength || product.timing) && (
-            <div className="flex flex-wrap gap-2 mb-6">
-              {product.intensity && <span className="pill text-xs capitalize">{product.intensity} intensity</span>}
+            <div className="flex flex-wrap gap-2 mb-5">
+              {product.intensity && <span className="pill text-xs capitalize">{product.intensity} Intensity</span>}
               {product.strength && <span className="pill text-xs capitalize">{product.strength}</span>}
               {product.timing && <span className="pill text-xs capitalize">{product.timing}</span>}
             </div>
           )}
 
           {product.labels && product.labels.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-6">
+            <div className="flex flex-wrap gap-2 mb-5">
               {product.labels.map((label, i) => (
                 <span key={i} className="badge badge-cyan">{label}</span>
               ))}
@@ -99,17 +113,17 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
 
           {product.long_description_md && (
             <div
-              className="article-content text-sm leading-relaxed mb-6"
+              className="text-sm leading-relaxed mb-5"
               style={{ color: 'var(--color-text-secondary)' }}
             >
               {product.long_description_md.split('\n').map((line, i) => (
-                <p key={i} className="mb-3">{line}</p>
+                <p key={i} className="mb-2.5">{line}</p>
               ))}
             </div>
           )}
 
           {product.image_gallery_paths && product.image_gallery_paths.length > 0 && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+            <div className="grid grid-cols-3 gap-2.5 mb-5">
               {product.image_gallery_paths.map((img, i) => (
                 <div key={i} className="aspect-square rounded-xl overflow-hidden" style={{ background: 'var(--color-bg-secondary)' }}>
                   <img src={img} alt={`${product.name} gallery ${i + 1}`} className="w-full h-full object-cover" />
@@ -118,7 +132,7 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
             </div>
           )}
 
-          <p className="text-xs mt-4" style={{ color: 'var(--color-text-tertiary)' }}>
+          <p className="text-[11px] mt-5 pt-4" style={{ color: 'var(--color-text-tertiary)', borderTop: '1px solid var(--color-border)' }}>
             Effects may vary by person. This product is for informational purposes only.
           </p>
         </div>
