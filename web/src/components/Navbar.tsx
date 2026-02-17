@@ -20,12 +20,12 @@ export default function Navbar() {
       style={{ height: 'var(--nav-height)' }}
     >
       <div className="container flex justify-between items-center h-full">
-        <Link to="/" className="flex items-center gap-2.5 group">
+        <Link to="/" className="flex items-center gap-2 group">
           <img
             src="/upliftroom-logo.svg"
             alt="UpliftRoom"
             className="transition-transform duration-300 group-hover:scale-105"
-            style={{ height: 'calc(var(--nav-height) - 20px)', width: 'auto' }}
+            style={{ height: 'calc(var(--nav-height) - 16px)', width: 'auto' }}
           />
           <span
             className="text-xl font-bold tracking-tight gradient-text"

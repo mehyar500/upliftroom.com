@@ -254,7 +254,7 @@ export default function ProductsPage() {
                   )}
                 </div>
 
-                <div className="px-6 pt-5 pb-7">
+                <div style={{ padding: '20px 24px 28px' }}>
                   <div className="flex items-center gap-2 mb-2 flex-wrap">
                     {product.categories && (
                       <span className="text-xs capitalize" style={{ color: 'var(--color-text-tertiary)' }}>

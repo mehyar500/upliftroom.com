@@ -107,8 +107,7 @@ export default function HomePage() {
             <img
               src="/upliftroom-logo.svg"
               alt="UpliftRoom"
-              className="w-20 h-20 md:w-24 md:h-24 rounded-2xl"
-              style={{ boxShadow: 'var(--shadow-xl)' }}
+              className="w-20 h-20 md:w-24 md:h-24"
             />
           </div>
 

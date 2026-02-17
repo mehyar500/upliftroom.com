@@ -45,8 +45,7 @@ export default function AboutPage() {
             <img
               src="/upliftroom-logo.svg"
               alt="UpliftRoom"
-              className="w-16 h-16 rounded-xl"
-              style={{ boxShadow: 'var(--shadow-lg)' }}
+              className="w-16 h-16"
             />
           </div>
           <h1 className="section-title mb-3">About UpliftRoom</h1>
