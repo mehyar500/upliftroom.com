@@ -15,23 +15,24 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Start application"
+args = "Start application (Full Stack)"
 
 [[workflows.workflow]]
-name = "Start application"
+name = "Start application (Full Stack)"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd /home/runner/workspace && npm run dev"
-waitForPort = 5000
-
-[workflows.workflow.metadata]
-outputType = "webview"
+args = "npm run dev:all"
 
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 8787
+externalPort = 3000
+exposeLocalhost = true
 
 [deployment]
 deploymentTarget = "static"
