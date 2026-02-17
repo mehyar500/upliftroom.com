@@ -56,43 +56,51 @@ export default function LatestPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-slate-400">Loading latest news...</div>
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div
+            className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
+            style={{ borderColor: 'var(--color-border-strong)', borderTopColor: 'transparent' }}
+          />
+          <span className="text-sm" style={{ color: 'var(--color-text-tertiary)' }}>Loading latest news...</span>
+        </div>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-red-400">{error}</div>
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <p className="text-red-500">{error}</p>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-slate-950">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">Latest News</h1>
-          <p className="text-slate-400">Stay updated with cannabis culture and industry news</p>
+    <div className="page-section">
+      <div className="container">
+        <div className="text-center mb-10">
+          <h1 className="section-title mb-3">Latest News</h1>
+          <p className="section-subtitle mx-auto" style={{ maxWidth: '480px' }}>
+            Stay updated with cannabis culture and industry news
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {items.map((item) => (
             <a
               key={item.id}
               href={item.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="group bg-slate-900/80 backdrop-blur-lg border border-slate-800 rounded-2xl overflow-hidden hover:border-cyan-500/50 transition-all"
+              className="card group"
             >
               {item.image_url && (
-                <div className="aspect-video bg-slate-800 overflow-hidden">
+                <div className="aspect-video overflow-hidden" style={{ background: 'var(--color-bg-secondary)' }}>
                   <img
                     src={item.image_url}
                     alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none'
                     }}
@@ -100,19 +108,22 @@ export default function LatestPage() {
                 </div>
               )}
               
-              <div className="p-4 md:p-6">
-                <div className="flex items-center gap-4 text-xs text-slate-500 mb-3">
-                  <span className="text-cyan-400">{item.rss_sources.name}</span>
-                  <span>•</span>
+              <div className="p-5 md:p-6">
+                <div className="flex items-center gap-2 text-xs mb-3" style={{ color: 'var(--color-text-tertiary)' }}>
+                  <span style={{ color: 'var(--color-accent)' }}>{item.rss_sources.name}</span>
+                  <span>&middot;</span>
                   <span>{formatDate(item.published_at)}</span>
                 </div>
                 
-                <h3 className="text-xl font-semibold text-white mb-2 line-clamp-2 group-hover:text-cyan-400 transition-colors">
+                <h3
+                  className="text-base font-semibold line-clamp-2 mb-2 transition-colors group-hover:opacity-80"
+                  style={{ color: 'var(--color-text)', letterSpacing: '-0.01em' }}
+                >
                   {item.title}
                 </h3>
                 
                 {item.summary && (
-                  <p className="text-sm text-slate-400 line-clamp-3">
+                  <p className="text-sm line-clamp-3" style={{ color: 'var(--color-text-secondary)' }}>
                     {item.summary}
                   </p>
                 )}
@@ -122,12 +133,11 @@ export default function LatestPage() {
         </div>
 
         {items.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-slate-400">No news items available yet</p>
+          <div className="text-center py-16">
+            <p style={{ color: 'var(--color-text-tertiary)' }}>No news items available yet</p>
           </div>
         )}
       </div>
     </div>
   )
 }
-

@@ -52,56 +52,74 @@ export default function MenuPage() {
 
   if (loading) {
     return (
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <p className="text-slate-600 dark:text-slate-300">Loading menu...</p>
-      </section>
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div
+            className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
+            style={{ borderColor: 'var(--color-border-strong)', borderTopColor: 'transparent' }}
+          />
+          <span className="text-sm" style={{ color: 'var(--color-text-tertiary)' }}>Loading menu...</span>
+        </div>
+      </div>
     )
   }
 
   if (error) {
     return (
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <p className="text-red-600 dark:text-red-400">{error}</p>
-      </section>
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <p className="text-red-500">{error}</p>
+      </div>
     )
   }
 
   return (
-    <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-8 md:mb-10">
-        <h1 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white">Menu</h1>
-        <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 mt-2">
-          Condensed full menu with product name, price, and a quick note.
-        </p>
-      </div>
+    <div className="page-section">
+      <div className="container-narrow">
+        <div className="text-center mb-10">
+          <h1 className="section-title mb-3">Menu</h1>
+          <p className="section-subtitle">
+            Full menu with product name, price, and a quick note.
+          </p>
+        </div>
 
-      <div className="space-y-8">
-        {Object.entries(groupedProducts).map(([category, items]) => (
-          <div key={category} className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 backdrop-blur-lg p-4 md:p-6">
-            <h2 className="text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400 mb-4">
-              {category}
-            </h2>
+        <div className="space-y-6">
+          {Object.entries(groupedProducts).map(([category, items]) => (
+            <div key={category} className="card p-6 md:p-8">
+              <h2
+                className="text-xs font-semibold uppercase tracking-widest mb-5"
+                style={{ color: 'var(--color-accent)' }}
+              >
+                {category}
+              </h2>
 
-            <ul className="space-y-3">
-              {items.map((product) => (
-                <li key={product.id} className="border-b border-slate-200/80 dark:border-slate-700/80 pb-3 last:border-0 last:pb-0">
-                  <div className="flex items-start justify-between gap-4">
-                    <h3 className="text-sm md:text-base font-semibold text-slate-900 dark:text-slate-100 leading-snug">
-                      {product.name}
-                    </h3>
-                    <span className="shrink-0 text-sm font-semibold text-indigo-600 dark:text-indigo-400">
-                      {product.price_text || '—'}
-                    </span>
-                  </div>
-                  <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 mt-1 leading-snug">
-                    {product.short_description}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+              <ul className="space-y-4">
+                {items.map((product) => (
+                  <li
+                    key={product.id}
+                    className="pb-4 last:pb-0 last:border-0"
+                    style={{ borderBottom: '1px solid var(--color-border)' }}
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <h3 className="text-sm md:text-base font-semibold leading-snug" style={{ color: 'var(--color-text)' }}>
+                        {product.name}
+                      </h3>
+                      <span
+                        className="shrink-0 text-sm font-semibold"
+                        style={{ color: 'var(--color-accent)' }}
+                      >
+                        {product.price_text || '\u2014'}
+                      </span>
+                    </div>
+                    <p className="text-sm mt-1 leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+                      {product.short_description}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
-    </section>
+    </div>
   )
 }

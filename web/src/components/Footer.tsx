@@ -2,68 +2,79 @@ import { Link } from 'react-router-dom'
 
 export default function Footer() {
   return (
-    <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-auto">
-      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 md:py-12 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Brand */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 bg-gradient-to-r from-cyan-500 to-indigo-500 bg-clip-text text-transparent">
-              UpliftRoom
-            </h3>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
+    <footer
+      className="mt-auto"
+      style={{ borderTop: '1px solid var(--color-border)', background: 'var(--color-bg)' }}
+    >
+      <div className="container py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div className="sm:col-span-2 lg:col-span-1">
+            <Link to="/" className="flex items-center gap-3 mb-4">
+              <img src="/upliftroom-logo.svg" alt="UpliftRoom" className="w-8 h-8 rounded-lg" />
+              <span className="text-lg font-bold tracking-tight gradient-text">UpliftRoom</span>
+            </Link>
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-tertiary)' }}>
               Your lifestyle destination for premium cannabis products and culture.
             </p>
           </div>
 
-          {/* Quick Links */}
           <div>
-            <h4 className="text-sm font-semibold text-slate-900 dark:text-white mb-4">Quick Links</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/products" className="text-sm text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
-                  Products
-                </Link>
-              </li>
-              <li>
-                <Link to="/latest" className="text-sm text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
-                  Latest News
-                </Link>
-              </li>
+            <h4 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: 'var(--color-text-tertiary)' }}>
+              Explore
+            </h4>
+            <ul className="space-y-3">
+              {[
+                { to: '/products', label: 'Products' },
+                { to: '/menu', label: 'Menu' },
+                { to: '/latest', label: 'Latest News' },
+              ].map(link => (
+                <li key={link.to}>
+                  <Link
+                    to={link.to}
+                    className="text-sm transition-colors hover:opacity-80"
+                    style={{ color: 'var(--color-text-secondary)' }}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-slate-900 dark:text-white mb-4">Legal</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/about" className="text-sm text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link to="/privacy" className="text-sm text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link to="/terms" className="text-sm text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
-                  Terms of Service
-                </Link>
-              </li>
+            <h4 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: 'var(--color-text-tertiary)' }}>
+              Company
+            </h4>
+            <ul className="space-y-3">
+              {[
+                { to: '/about', label: 'About Us' },
+                { to: '/privacy', label: 'Privacy Policy' },
+                { to: '/terms', label: 'Terms of Service' },
+              ].map(link => (
+                <li key={link.to}>
+                  <Link
+                    to={link.to}
+                    className="text-sm transition-colors hover:opacity-80"
+                    style={{ color: 'var(--color-text-secondary)' }}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-8 pt-8 border-t border-slate-200 dark:border-slate-800">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-slate-500 dark:text-slate-400 text-center sm:text-left">
-              © {new Date().getFullYear()} UpliftRoom. All rights reserved.
-            </p>
-            <p className="text-xs text-slate-400 dark:text-slate-500 text-center sm:text-right">
-              Informational website. We do not sell products online. Effects may vary.
-            </p>
-          </div>
+        <div
+          className="mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4"
+          style={{ borderTop: '1px solid var(--color-border)' }}
+        >
+          <p className="text-xs" style={{ color: 'var(--color-text-tertiary)' }}>
+            &copy; {new Date().getFullYear()} UpliftRoom. All rights reserved.
+          </p>
+          <p className="text-xs text-center sm:text-right" style={{ color: 'var(--color-text-tertiary)' }}>
+            Informational website. We do not sell products online. Effects may vary.
+          </p>
         </div>
       </div>
     </footer>

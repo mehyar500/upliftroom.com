@@ -1,92 +1,115 @@
 export default function AboutPage() {
+  const sections = [
+    {
+      title: 'Our Mission',
+      content: `UpliftRoom is your modern lifestyle destination for cannabis culture and education. We're building a community-focused platform that celebrates cannabis in a responsible, informed, and lifestyle-forward way.`,
+    },
+    {
+      title: 'What We Do',
+      content: 'We provide an informational platform where you can:',
+      list: [
+        'Explore curated cannabis products with detailed, compliance-friendly descriptions',
+        'Stay updated with the latest cannabis industry news and culture',
+        'Learn about different product types, effects, and responsible use',
+        'Discover lifestyle content that celebrates cannabis culture',
+      ],
+    },
+    {
+      title: 'Our Approach',
+      content: 'We believe in a modern, responsible approach to cannabis:',
+      list: [
+        'Compliance First \u2014 We use experience-based language and avoid medical claims',
+        'Education Focused \u2014 Providing accurate, helpful information for informed decisions',
+        'Lifestyle Forward \u2014 Celebrating cannabis as part of a balanced, modern lifestyle',
+        'Community Driven \u2014 Building a welcoming space for cannabis enthusiasts',
+      ],
+    },
+    {
+      title: 'Important Information',
+      content: 'This is an informational website. We do not:',
+      list: [
+        'Sell products online',
+        'Process payments or transactions',
+        'Offer delivery services',
+        'Provide medical advice or make health claims',
+      ],
+      footer: 'All product information is for educational purposes. Effects may vary by person. This site is intended for adults 21+ in jurisdictions where cannabis is legal.',
+    },
+  ]
+
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-8">
-          About UpliftRoom
-        </h1>
-        
-        <div className="prose prose-lg dark:prose-invert max-w-none space-y-8">
-          <section className="bg-white/90 dark:bg-slate-900/80 backdrop-blur-lg rounded-2xl p-4 md:p-6 border border-slate-200 dark:border-slate-800">
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">Our Mission</h2>
-            <p className="text-slate-700 dark:text-slate-300">
-              UpliftRoom is your modern lifestyle destination for cannabis culture and education. We're building a
-              community-focused platform that celebrates cannabis in a responsible, informed, and lifestyle-forward way.
-            </p>
-          </section>
+    <div className="page-section">
+      <div className="container-narrow">
+        <div className="text-center mb-12">
+          <div className="flex justify-center mb-6">
+            <img
+              src="/upliftroom-logo.svg"
+              alt="UpliftRoom"
+              className="w-16 h-16 rounded-xl"
+              style={{ boxShadow: 'var(--shadow-lg)' }}
+            />
+          </div>
+          <h1 className="section-title mb-3">About UpliftRoom</h1>
+          <p className="section-subtitle mx-auto" style={{ maxWidth: '480px' }}>
+            Products + stories, mixed for a modern cannabis lifestyle.
+          </p>
+        </div>
 
-          <section className="bg-white/90 dark:bg-slate-900/80 backdrop-blur-lg rounded-2xl p-4 md:p-6 border border-slate-200 dark:border-slate-800">
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">What We Do</h2>
-            <div className="space-y-4 text-slate-700 dark:text-slate-300">
-              <p>
-                We provide an informational platform where you can:
+        <div className="space-y-5">
+          {sections.map(section => (
+            <div key={section.title} className="card p-6 md:p-8">
+              <h2
+                className="text-xl font-semibold mb-4"
+                style={{ color: 'var(--color-text)', letterSpacing: '-0.02em' }}
+              >
+                {section.title}
+              </h2>
+              <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--color-text-secondary)' }}>
+                {section.content}
               </p>
-              <ul className="list-disc pl-6 space-y-2">
-                <li>Explore curated cannabis products with detailed, compliance-friendly descriptions</li>
-                <li>Stay updated with the latest cannabis industry news and culture</li>
-                <li>Learn about different product types, effects, and responsible use</li>
-                <li>Discover lifestyle content that celebrates cannabis culture</li>
-              </ul>
+              {section.list && (
+                <ul className="space-y-2.5 mb-4">
+                  {section.list.map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <span
+                        className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0"
+                        style={{ background: 'var(--color-accent)' }}
+                      />
+                      <span className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+                        {item}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {section.footer && (
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-tertiary)' }}>
+                  {section.footer}
+                </p>
+              )}
             </div>
-          </section>
+          ))}
 
-          <section className="bg-white/90 dark:bg-slate-900/80 backdrop-blur-lg rounded-2xl p-4 md:p-6 border border-slate-200 dark:border-slate-800">
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">Our Approach</h2>
-            <div className="space-y-4 text-slate-700 dark:text-slate-300">
-              <p>
-                We believe in a modern, responsible approach to cannabis:
-              </p>
-              <ul className="list-disc pl-6 space-y-2">
-                <li><strong>Compliance First:</strong> We use experience-based language and avoid medical claims</li>
-                <li><strong>Education Focused:</strong> Providing accurate, helpful information for informed decisions</li>
-                <li><strong>Lifestyle Forward:</strong> Celebrating cannabis as part of a balanced, modern lifestyle</li>
-                <li><strong>Community Driven:</strong> Building a welcoming space for cannabis enthusiasts</li>
-              </ul>
-            </div>
-          </section>
-
-          <section className="bg-white/90 dark:bg-slate-900/80 backdrop-blur-lg rounded-2xl p-4 md:p-6 border border-slate-200 dark:border-slate-800">
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">Important Information</h2>
-            <div className="space-y-4 text-slate-700 dark:text-slate-300">
-              <p>
-                <strong>This is an informational website.</strong> We do not:
-              </p>
-              <ul className="list-disc pl-6 space-y-2">
-                <li>Sell products online</li>
-                <li>Process payments or transactions</li>
-                <li>Offer delivery services</li>
-                <li>Provide medical advice or make health claims</li>
-              </ul>
-              <p className="mt-4">
-                All product information is for educational purposes. Effects may vary by person. This site is intended
-                for adults 21+ in jurisdictions where cannabis is legal.
-              </p>
-            </div>
-          </section>
-
-          <section className="bg-gradient-to-br from-cyan-50 to-indigo-50 dark:from-cyan-900/20 dark:to-indigo-900/20 rounded-2xl p-4 md:p-6 border border-cyan-200 dark:border-cyan-800">
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">Built for the Community</h2>
-            <p className="text-slate-700 dark:text-slate-300">
+          <div
+            className="card p-6 md:p-8"
+            style={{
+              background: 'linear-gradient(135deg, rgba(124,58,237,0.06), rgba(6,182,212,0.06))',
+            }}
+          >
+            <h2
+              className="text-xl font-semibold mb-4"
+              style={{ color: 'var(--color-text)', letterSpacing: '-0.02em' }}
+            >
+              Built for the Community
+            </h2>
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
               UpliftRoom is built by cannabis enthusiasts, for cannabis enthusiasts. We're constantly evolving based on
               community feedback and industry developments. Our goal is to create the most helpful, modern, and
               accessible cannabis information platform.
             </p>
-          </section>
-
-          <section className="bg-white/90 dark:bg-slate-900/80 backdrop-blur-lg rounded-2xl p-4 md:p-6 border border-slate-200 dark:border-slate-800">
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">Technology & Privacy</h2>
-            <p className="text-slate-700 dark:text-slate-300">
-              We use modern web technologies to provide a fast, secure, and accessible experience. We collect minimal
-              data and prioritize your privacy. Learn more in our{' '}
-              <a href="/privacy" className="text-cyan-500 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
-                Privacy Policy
-              </a>.
-            </p>
-          </section>
+          </div>
         </div>
       </div>
     </div>
   )
 }
-
-

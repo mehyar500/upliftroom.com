@@ -53,40 +53,45 @@ export default function ProductsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
-        <div className="text-slate-600 dark:text-slate-400">Loading products...</div>
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div
+            className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
+            style={{ borderColor: 'var(--color-border-strong)', borderTopColor: 'transparent' }}
+          />
+          <span className="text-sm" style={{ color: 'var(--color-text-tertiary)' }}>Loading products...</span>
+        </div>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
-        <div className="text-red-600 dark:text-red-400">{error}</div>
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 mb-2">{error}</p>
+          <button onClick={() => { setError(null); setLoading(true); fetchProducts() }} className="btn-secondary text-sm">
+            Try Again
+          </button>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-2">Products</h1>
-          <p className="text-slate-600 dark:text-slate-400">
+    <div className="page-section">
+      <div className="container">
+        <div className="text-center mb-10">
+          <h1 className="section-title mb-3">Products</h1>
+          <p className="section-subtitle mx-auto" style={{ maxWidth: '480px' }}>
             Explore our curated selection of premium cannabis products
           </p>
         </div>
 
-        {/* Category Filter */}
-        <div className="mb-8 flex flex-wrap gap-4 justify-center">
+        <div className="mb-10 flex flex-wrap gap-2 justify-center">
           <button
             onClick={() => setSelectedCategory(null)}
-            className={`px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide text-center transition-all ${
-              selectedCategory === null
-                ? 'bg-gradient-to-r from-cyan-500 to-indigo-500 text-white shadow-sm shadow-indigo-500/30'
-                : 'bg-white/90 dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 hover:border-cyan-400 dark:hover:border-cyan-500'
-            }`}
+            className={`pill ${selectedCategory === null ? 'pill-active' : ''}`}
           >
             All
           </button>
@@ -94,36 +99,30 @@ export default function ProductsPage() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide text-center transition-all capitalize ${
-                selectedCategory === cat
-                  ? 'bg-gradient-to-r from-cyan-500 to-indigo-500 text-white shadow-sm shadow-indigo-500/30'
-                  : 'bg-white/90 dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 hover:border-cyan-400 dark:hover:border-cyan-500'
-              }`}
+              className={`pill capitalize ${selectedCategory === cat ? 'pill-active' : ''}`}
             >
               {cat.replace('-', ' ')}
             </button>
           ))}
         </div>
 
-        {/* Products Grid */}
         {products.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-slate-600 dark:text-slate-400">No products available yet</p>
+          <div className="text-center py-16">
+            <p style={{ color: 'var(--color-text-tertiary)' }}>No products available yet</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {products.map(product => (
-              <div
-                key={product.id}
-                className="group bg-white/90 dark:bg-slate-900/80 backdrop-blur-lg border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden hover:shadow-lg hover:border-cyan-400/60 dark:hover:border-cyan-500/60 transition-all"
-              >
-                {/* Image */}
-                <div className="aspect-square bg-gradient-to-br from-cyan-50 to-indigo-50 dark:from-slate-800 dark:to-slate-900 overflow-hidden relative">
+              <div key={product.id} className="card group">
+                <div
+                  className="aspect-square overflow-hidden relative"
+                  style={{ background: 'var(--color-bg-secondary)' }}
+                >
                   {product.image_cover_path ? (
                     <img
                       src={product.image_cover_path}
                       alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       onError={(e) => {
                         e.currentTarget.src = '/product-placeholder.svg'
                       }}
@@ -132,55 +131,51 @@ export default function ProductsPage() {
                     <img
                       src="/product-placeholder.svg"
                       alt={product.name}
-                      className="w-full h-full object-cover opacity-50"
+                      className="w-full h-full object-cover opacity-40"
                     />
                   )}
                   
                   {product.is_featured && (
-                    <div className="absolute top-3 right-3 bg-yellow-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                    <div className="absolute top-3 right-3 badge gradient-bg text-white" style={{ border: 'none' }}>
                       Featured
                     </div>
                   )}
                 </div>
 
-                {/* Content */}
-                <div className="p-4 md:p-6">
-                  {/* Category & Profile */}
-                  <div className="flex items-center gap-4 mb-2">
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-2">
                     {product.categories && (
-                      <span className="text-xs text-slate-500 dark:text-slate-400 capitalize">
+                      <span className="text-xs capitalize" style={{ color: 'var(--color-text-tertiary)' }}>
                         {product.categories.name}
                       </span>
                     )}
                     {product.profile && (
                       <>
-                        <span className="text-xs text-slate-400">•</span>
-                        <span className="text-xs px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-full capitalize">
-                          {product.profile}
-                        </span>
+                        <span className="text-xs" style={{ color: 'var(--color-text-tertiary)' }}>&middot;</span>
+                        <span className="badge badge-accent capitalize">{product.profile}</span>
                       </>
                     )}
                   </div>
 
-                  {/* Name */}
-                  <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-cyan-500 dark:group-hover:text-cyan-400 transition-colors">
+                  <h3
+                    className="text-base font-semibold mb-1.5 line-clamp-2 transition-colors group-hover:opacity-80"
+                    style={{ color: 'var(--color-text)', letterSpacing: '-0.01em' }}
+                  >
                     {product.name}
                   </h3>
 
-                  {/* Description */}
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-3 line-clamp-2">
+                  <p className="text-sm line-clamp-2 mb-3" style={{ color: 'var(--color-text-secondary)' }}>
                     {product.short_description}
                   </p>
 
-                  {/* Footer */}
                   <div className="flex items-center justify-between">
                     {product.price_text && (
-                      <span className="text-sm font-semibold text-slate-900 dark:text-white">
+                      <span className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
                         {product.price_text}
                       </span>
                     )}
                     {product.intensity && (
-                      <span className="text-xs text-slate-500 dark:text-slate-400 capitalize">
+                      <span className="text-xs capitalize" style={{ color: 'var(--color-text-tertiary)' }}>
                         {product.intensity}
                       </span>
                     )}
