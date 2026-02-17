@@ -16,30 +16,21 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const root = window.document.documentElement
-    
-    // Remove both classes first
+
     root.classList.remove('light', 'dark')
-    
-    // Add the current theme
     root.classList.add(theme)
-    
-    // Save to localStorage
+    root.setAttribute('data-theme', theme)
+    root.style.colorScheme = theme
+
     localStorage.setItem('theme', theme)
-    
-    console.log('Theme changed to:', theme, 'Classes:', root.className)
   }, [theme])
 
   const toggleTheme = () => {
-    setTheme(prevTheme => {
-      const newTheme = prevTheme === 'light' ? 'dark' : 'light'
-      console.log('Toggling theme from', prevTheme, 'to', newTheme)
-      return newTheme
-    })
+    const root = window.document.documentElement
+    const currentTheme: Theme = root.classList.contains('dark') ? 'dark' : 'light'
+    const nextTheme: Theme = currentTheme === 'light' ? 'dark' : 'light'
+    setTheme(nextTheme)
   }
 
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  )
+  return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>
 }

@@ -68,7 +68,7 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         {/* Header */}
         <div className="mb-8">
@@ -79,13 +79,13 @@ export default function ProductsPage() {
         </div>
 
         {/* Category Filter */}
-        <div className="mb-8 flex flex-wrap gap-2">
+        <div className="mb-8 flex flex-wrap gap-3 justify-center">
           <button
             onClick={() => setSelectedCategory(null)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+            className={`px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide text-center transition-all ${
               selectedCategory === null
-                ? 'bg-green-500 text-white'
-                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:border-green-500 dark:hover:border-green-500'
+                ? 'bg-gradient-to-r from-cyan-500 to-indigo-500 text-white shadow-sm shadow-indigo-500/30'
+                : 'bg-white/90 dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 hover:border-cyan-400 dark:hover:border-cyan-500'
             }`}
           >
             All
@@ -94,10 +94,10 @@ export default function ProductsPage() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors capitalize ${
+              className={`px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide text-center transition-all capitalize ${
                 selectedCategory === cat
-                  ? 'bg-green-500 text-white'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 hover:border-green-500 dark:hover:border-green-500'
+                  ? 'bg-gradient-to-r from-cyan-500 to-indigo-500 text-white shadow-sm shadow-indigo-500/30'
+                  : 'bg-white/90 dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 hover:border-cyan-400 dark:hover:border-cyan-500'
               }`}
             >
               {cat.replace('-', ' ')}
@@ -115,10 +115,10 @@ export default function ProductsPage() {
             {products.map(product => (
               <div
                 key={product.id}
-                className="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:shadow-lg hover:border-green-500/50 dark:hover:border-green-500/50 transition-all"
+                className="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden hover:shadow-lg hover:border-cyan-400/60 dark:hover:border-cyan-500/60 transition-all"
               >
                 {/* Image */}
-                <div className="aspect-square bg-gray-100 dark:bg-gray-800 overflow-hidden relative">
+                <div className="aspect-square bg-gradient-to-br from-cyan-50 to-indigo-50 dark:from-slate-800 dark:to-slate-900 overflow-hidden relative">
                   {product.image_cover_path ? (
                     <img
                       src={product.image_cover_path}
