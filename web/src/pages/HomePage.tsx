@@ -7,6 +7,7 @@ type Tile = {
   to: string
   type: 'product' | 'article'
   span?: string
+  image: string
 }
 
 const spotlightTiles: Tile[] = [
@@ -16,24 +17,28 @@ const spotlightTiles: Tile[] = [
     to: '/products',
     type: 'product',
     span: 'md:col-span-2',
+    image: '/images/tile-gummies.png',
   },
   {
     title: 'Night Ritual Picks',
     description: 'Calming blends curated for a slower evening landing.',
     to: '/products',
     type: 'product',
+    image: '/images/tile-night.png',
   },
   {
     title: "What's Trending",
     description: 'Fresh reads on cannabis culture, wellness, and design.',
     to: '/latest',
     type: 'article',
+    image: '/images/tile-trending.png',
   },
   {
     title: 'Pre-roll Edit',
     description: 'Staff-favorite pre-rolls for social and creative sessions.',
     to: '/products',
     type: 'product',
+    image: '/images/tile-preroll.png',
   },
   {
     title: 'Find Your Profile',
@@ -41,6 +46,7 @@ const spotlightTiles: Tile[] = [
     to: '/latest',
     type: 'article',
     span: 'md:col-span-2',
+    image: '/images/tile-profile.png',
   },
 ]
 
@@ -65,27 +71,38 @@ function SpotlightCard({ tile }: { tile: Tile }) {
   return (
     <Link
       to={tile.to}
-      className={`card group relative flex flex-col justify-between min-h-[220px] ${tile.span ?? ''}`}
-      style={{ padding: '28px 28px 24px' }}
+      className={`card group relative overflow-hidden flex flex-col ${tile.span ?? ''}`}
     >
-      <div>
-        <span className={`badge mb-4 ${isArticle ? 'badge-accent' : 'badge-cyan'}`}>
-          {isArticle ? 'Guide' : 'Product'}
-        </span>
+      <div
+        className="w-full overflow-hidden"
+        style={{ aspectRatio: '16/9', borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0' }}
+      >
+        <img
+          src={tile.image}
+          alt={tile.title}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+      </div>
+      <div style={{ padding: '20px 24px 24px' }} className="flex flex-col flex-1">
+        <div className="flex items-center gap-2 mb-3">
+          <span className={`badge ${isArticle ? 'badge-accent' : 'badge-cyan'}`}>
+            {isArticle ? 'Guide' : 'Product'}
+          </span>
+        </div>
         <h3
-          className="text-xl font-semibold mb-2 transition-colors"
+          className="text-lg font-semibold mb-1.5 transition-colors"
           style={{ color: 'var(--color-text)', letterSpacing: '-0.02em' }}
         >
           {tile.title}
         </h3>
-        <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+        <p className="text-sm leading-relaxed flex-1" style={{ color: 'var(--color-text-secondary)' }}>
           {tile.description}
         </p>
+        <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold gradient-text">
+          Explore
+          <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
+        </span>
       </div>
-      <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold gradient-text">
-        Explore
-        <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
-      </span>
     </Link>
   )
 }
@@ -106,34 +123,36 @@ export default function HomePage() {
           <div className="absolute inset-0" style={{ background: 'var(--color-bg)', opacity: 0.6 }} />
         </div>
 
-        <div className="container relative text-center">
-          <div className="flex justify-center mb-8">
+        <div
+          className="relative"
+          style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto', padding: '0 24px' }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
             <img
               src="/upliftroom-logo.svg"
               alt="UpliftRoom"
-              className="w-20 h-20 md:w-24 md:h-24"
+              style={{ width: '96px', height: '96px' }}
             />
           </div>
 
           <h1
-            className="gradient-text mx-auto"
+            className="gradient-text"
             style={{
               fontSize: 'clamp(2.5rem, 8vw, 5rem)',
               fontWeight: 800,
               letterSpacing: '-0.04em',
               lineHeight: 1.05,
-              maxWidth: '700px',
             }}
           >
             UpliftRoom
           </h1>
 
           <p
-            className="mx-auto mt-6"
             style={{
               fontSize: 'clamp(1.05rem, 2.5vw, 1.375rem)',
               color: 'var(--color-text-secondary)',
               maxWidth: '540px',
+              margin: '24px auto 0',
               lineHeight: 1.6,
               letterSpacing: '-0.01em',
             }}
@@ -141,7 +160,7 @@ export default function HomePage() {
             Explore cannabis culture, learn about products, and find your vibe.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-10">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center" style={{ marginTop: '40px' }}>
             <Link to="/products" className="btn-primary w-full sm:w-auto">
               Explore Products
             </Link>
