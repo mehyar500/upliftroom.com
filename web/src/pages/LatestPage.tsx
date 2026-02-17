@@ -56,26 +56,26 @@ export default function LatestPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-        <div className="text-gray-400">Loading latest news...</div>
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <div className="text-slate-400">Loading latest news...</div>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-red-400">{error}</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-950">
+    <div className="min-h-screen bg-slate-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Latest News</h1>
-          <p className="text-gray-400">Stay updated with cannabis culture and industry news</p>
+          <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">Latest News</h1>
+          <p className="text-slate-400">Stay updated with cannabis culture and industry news</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -85,10 +85,10 @@ export default function LatestPage() {
               href={item.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="group bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-green-500/50 transition-all"
+              className="group bg-slate-900/80 backdrop-blur-lg border border-slate-800 rounded-2xl overflow-hidden hover:border-cyan-500/50 transition-all"
             >
               {item.image_url && (
-                <div className="aspect-video bg-gray-800 overflow-hidden">
+                <div className="aspect-video bg-slate-800 overflow-hidden">
                   <img
                     src={item.image_url}
                     alt={item.title}
@@ -100,19 +100,19 @@ export default function LatestPage() {
                 </div>
               )}
               
-              <div className="p-6">
-                <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
-                  <span className="text-green-400">{item.rss_sources.name}</span>
+              <div className="p-4 md:p-6">
+                <div className="flex items-center gap-4 text-xs text-slate-500 mb-3">
+                  <span className="text-cyan-400">{item.rss_sources.name}</span>
                   <span>•</span>
                   <span>{formatDate(item.published_at)}</span>
                 </div>
                 
-                <h3 className="text-lg font-semibold text-white mb-2 line-clamp-2 group-hover:text-green-400 transition-colors">
+                <h3 className="text-xl font-semibold text-white mb-2 line-clamp-2 group-hover:text-cyan-400 transition-colors">
                   {item.title}
                 </h3>
                 
                 {item.summary && (
-                  <p className="text-sm text-gray-400 line-clamp-3">
+                  <p className="text-sm text-slate-400 line-clamp-3">
                     {item.summary}
                   </p>
                 )}
@@ -123,10 +123,11 @@ export default function LatestPage() {
 
         {items.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-400">No news items available yet</p>
+            <p className="text-slate-400">No news items available yet</p>
           </div>
         )}
       </div>
     </div>
   )
 }
+

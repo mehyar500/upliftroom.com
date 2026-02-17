@@ -48,7 +48,7 @@ export default function Layout({ children }: LayoutProps) {
   }, [location.pathname, navigate])
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-white flex flex-col">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white flex flex-col">
       <Navbar />
       <main className="flex-1">{children}</main>
       <Footer />

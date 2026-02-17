@@ -23,7 +23,7 @@ const spotlightTiles: Tile[] = [
     type: 'product',
   },
   {
-    title: 'What’s Trending in 2026',
+    title: 'What’s Trending Today',
     description: 'Fresh reads on cannabis culture, wellness, and design.',
     to: '/latest',
     type: 'article',
@@ -64,10 +64,10 @@ function SpotlightCard({ tile }: { tile: Tile }) {
   return (
     <Link
       to={tile.to}
-      className={`group relative rounded-2xl border p-5 md:p-6 transition-all hover:shadow-lg ${tile.span ?? ''} ${
+      className={`group relative rounded-2xl border p-4 md:p-6 backdrop-blur-lg transition-all hover:shadow-lg ${tile.span ?? ''} ${
         isArticle
-          ? 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-indigo-400/60 dark:hover:border-indigo-500/60'
-          : 'bg-gradient-to-br from-cyan-50 to-indigo-50 dark:from-slate-900 dark:to-slate-800 border-cyan-200/70 dark:border-slate-700 hover:border-cyan-400/60 dark:hover:border-cyan-500/60'
+          ? 'bg-white/90 dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 hover:border-indigo-400/60 dark:hover:border-indigo-500/60'
+          : 'bg-gradient-to-br from-cyan-50/90 to-indigo-50/90 dark:from-slate-900/80 dark:to-slate-800/80 border-slate-200 dark:border-slate-800 hover:border-cyan-400/60 dark:hover:border-cyan-500/60'
       }`}
     >
       <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold mb-4 ${
@@ -77,9 +77,9 @@ function SpotlightCard({ tile }: { tile: Tile }) {
       }`}>
         {isArticle ? 'Article' : 'Product'}
       </span>
-      <h3 className="text-lg md:text-xl font-semibold text-slate-900 dark:text-white mb-2">{tile.title}</h3>
+      <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">{tile.title}</h3>
       <p className="text-sm md:text-base text-slate-600 dark:text-slate-300">{tile.description}</p>
-      <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-cyan-600 dark:text-cyan-400">
+      <span className="mt-4 inline-flex items-center gap-4 text-sm font-semibold text-cyan-600 dark:text-cyan-400">
         Explore
         <span className="transition-transform group-hover:translate-x-1">→</span>
       </span>
@@ -93,9 +93,9 @@ export default function HomePage() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/10 to-transparent dark:from-cyan-500/5" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center space-y-6 md:space-y-8">
-            <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 bg-clip-text text-transparent">
+            <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold bg-gradient-to-r from-cyan-500 to-indigo-500 bg-clip-text text-transparent">
               UpliftRoom
             </h1>
 
@@ -122,31 +122,31 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-14">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex items-end justify-between gap-4 mb-6">
-          <h2 className="text-2xl md:text-3xl font-semibold text-slate-900 dark:text-white">Featured Mix</h2>
-          <Link to="/latest" className="text-sm font-semibold text-cyan-600 dark:text-cyan-400 hover:underline">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">Featured Mix</h2>
+          <Link to="/latest" className="text-sm font-semibold text-cyan-600 dark:text-cyan-400 hover:underline transition-all">
             View more articles
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {spotlightTiles.map(tile => (
             <SpotlightCard key={tile.title} tile={tile} />
           ))}
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14 md:pb-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {articleHighlights.map(item => (
             <article
               key={item.title}
-              className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6"
+              className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 backdrop-blur-lg p-4 md:p-6 hover:shadow-lg transition-all"
             >
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">{item.title}</h3>
+              <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">{item.title}</h3>
               <p className="text-sm text-slate-600 dark:text-slate-300 mb-4">{item.excerpt}</p>
-              <Link to="/latest" className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">
+              <Link to="/latest" className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:underline transition-all">
                 View more →
               </Link>
             </article>
@@ -156,3 +156,4 @@ export default function HomePage() {
     </div>
   )
 }
+

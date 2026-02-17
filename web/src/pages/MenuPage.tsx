@@ -52,7 +52,7 @@ export default function MenuPage() {
 
   if (loading) {
     return (
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <p className="text-slate-600 dark:text-slate-300">Loading menu...</p>
       </section>
     )
@@ -60,16 +60,16 @@ export default function MenuPage() {
 
   if (error) {
     return (
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <p className="text-red-600 dark:text-red-400">{error}</p>
       </section>
     )
   }
 
   return (
-    <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-12">
+    <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-8 md:mb-10">
-        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">Menu</h1>
+        <h1 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white">Menu</h1>
         <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 mt-2">
           Condensed full menu with product name, price, and a quick note.
         </p>
@@ -77,7 +77,7 @@ export default function MenuPage() {
 
       <div className="space-y-8">
         {Object.entries(groupedProducts).map(([category, items]) => (
-          <div key={category} className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 p-4 md:p-5">
+          <div key={category} className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 backdrop-blur-lg p-4 md:p-6">
             <h2 className="text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400 mb-4">
               {category}
             </h2>

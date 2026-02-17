@@ -53,15 +53,15 @@ export default function ProductsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
-        <div className="text-gray-600 dark:text-gray-400">Loading products...</div>
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
+        <div className="text-slate-600 dark:text-slate-400">Loading products...</div>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
         <div className="text-red-600 dark:text-red-400">{error}</div>
       </div>
     )
@@ -69,17 +69,17 @@ export default function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">Products</h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <h1 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-2">Products</h1>
+          <p className="text-slate-600 dark:text-slate-400">
             Explore our curated selection of premium cannabis products
           </p>
         </div>
 
         {/* Category Filter */}
-        <div className="mb-8 flex flex-wrap gap-3 justify-center">
+        <div className="mb-8 flex flex-wrap gap-4 justify-center">
           <button
             onClick={() => setSelectedCategory(null)}
             className={`px-5 py-2.5 rounded-full text-sm font-semibold tracking-wide text-center transition-all ${
@@ -108,14 +108,14 @@ export default function ProductsPage() {
         {/* Products Grid */}
         {products.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600 dark:text-gray-400">No products available yet</p>
+            <p className="text-slate-600 dark:text-slate-400">No products available yet</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {products.map(product => (
               <div
                 key={product.id}
-                className="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden hover:shadow-lg hover:border-cyan-400/60 dark:hover:border-cyan-500/60 transition-all"
+                className="group bg-white/90 dark:bg-slate-900/80 backdrop-blur-lg border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden hover:shadow-lg hover:border-cyan-400/60 dark:hover:border-cyan-500/60 transition-all"
               >
                 {/* Image */}
                 <div className="aspect-square bg-gradient-to-br from-cyan-50 to-indigo-50 dark:from-slate-800 dark:to-slate-900 overflow-hidden relative">
@@ -144,17 +144,17 @@ export default function ProductsPage() {
                 </div>
 
                 {/* Content */}
-                <div className="p-4">
+                <div className="p-4 md:p-6">
                   {/* Category & Profile */}
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-4 mb-2">
                     {product.categories && (
-                      <span className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                      <span className="text-xs text-slate-500 dark:text-slate-400 capitalize">
                         {product.categories.name}
                       </span>
                     )}
                     {product.profile && (
                       <>
-                        <span className="text-xs text-gray-400">•</span>
+                        <span className="text-xs text-slate-400">•</span>
                         <span className="text-xs px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-full capitalize">
                           {product.profile}
                         </span>
@@ -163,24 +163,24 @@ export default function ProductsPage() {
                   </div>
 
                   {/* Name */}
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-green-500 dark:group-hover:text-green-400 transition-colors">
+                  <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2 line-clamp-2 group-hover:text-cyan-500 dark:group-hover:text-cyan-400 transition-colors">
                     {product.name}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-3 line-clamp-2">
                     {product.short_description}
                   </p>
 
                   {/* Footer */}
                   <div className="flex items-center justify-between">
                     {product.price_text && (
-                      <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                      <span className="text-sm font-semibold text-slate-900 dark:text-white">
                         {product.price_text}
                       </span>
                     )}
                     {product.intensity && (
-                      <span className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                      <span className="text-xs text-slate-500 dark:text-slate-400 capitalize">
                         {product.intensity}
                       </span>
                     )}
