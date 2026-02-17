@@ -1,114 +1,207 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useSEO } from '../hooks/useSEO'
 
-type Tile = {
-  title: string
-  description: string
-  to: string
-  type: 'product' | 'article'
-  span?: string
-  image: string
+const API_URL = import.meta.env.VITE_API_URL || 'https://api.upliftroom.com'
+
+interface Product {
+  id: string
+  name: string
+  slug: string
+  short_description: string
+  image_cover_path: string | null
+  is_featured: boolean
+  strength: string | null
+  timing: string | null
+  price_text: string | null
+  categories: {
+    name: string
+    slug: string
+  } | null
 }
 
-const spotlightTiles: Tile[] = [
-  {
-    title: 'Microdose Gummies',
-    description: 'Functional, balanced, and easy to dose for daytime flow.',
-    to: '/products',
-    type: 'product',
-    span: 'md:col-span-2',
-    image: '/images/tile-gummies.png',
-  },
-  {
-    title: 'Night Ritual Picks',
-    description: 'Calming blends curated for a slower evening landing.',
-    to: '/products',
-    type: 'product',
-    image: '/images/tile-night.png',
-  },
-  {
-    title: "What's Trending",
-    description: 'Fresh reads on cannabis culture, wellness, and design.',
-    to: '/latest',
-    type: 'article',
-    image: '/images/tile-trending.png',
-  },
-  {
-    title: 'Pre-roll Edit',
-    description: 'Staff-favorite pre-rolls for social and creative sessions.',
-    to: '/products',
-    type: 'product',
-    image: '/images/tile-preroll.png',
-  },
-  {
-    title: 'Find Your Profile',
-    description: 'Match your vibe to the right product profile.',
-    to: '/latest',
-    type: 'article',
-    span: 'md:col-span-2',
-    image: '/images/tile-profile.png',
-  },
-]
+interface RSSItem {
+  id: string
+  title: string
+  link: string
+  summary: string | null
+  image_url: string | null
+  published_at: string
+  rss_sources: {
+    name: string
+  }
+}
 
-const guides = [
-  {
-    title: 'Know Your Product Types',
-    excerpt: 'Flower, vapes, edibles, concentrates — understand each format and what to expect.',
-  },
-  {
-    title: 'Session Design 101',
-    excerpt: 'Rituals, playlists, and pairings for a premium at-home experience.',
-  },
-  {
-    title: 'Culture Snapshot',
-    excerpt: 'The creators, trends, and communities shaping modern cannabis lifestyle.',
-  },
-]
-
-function SpotlightCard({ tile }: { tile: Tile }) {
-  const isArticle = tile.type === 'article'
-
+function ProductCard({ product }: { product: Product }) {
   return (
     <Link
-      to={tile.to}
-      className={`card group relative overflow-hidden flex flex-col ${tile.span ?? ''}`}
+      to={`/products`}
+      className="card group cursor-pointer"
     >
       <div
-        className="w-full overflow-hidden"
-        style={{ aspectRatio: '16/9', borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0' }}
+        className="aspect-square overflow-hidden relative"
+        style={{ background: 'var(--color-bg-secondary)', borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0' }}
       >
-        <img
-          src={tile.image}
-          alt={tile.title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+        {product.image_cover_path ? (
+          <img
+            src={product.image_cover_path}
+            alt={product.name}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            onError={(e) => { e.currentTarget.src = '/product-placeholder.svg' }}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <img src="/product-placeholder.svg" alt={product.name} className="w-1/2 h-1/2 object-contain opacity-30" />
+          </div>
+        )}
+        {product.is_featured && (
+          <div className="absolute top-3 right-3 badge gradient-bg text-white text-[10px]" style={{ border: 'none' }}>
+            Featured
+          </div>
+        )}
       </div>
-      <div style={{ padding: '20px 24px 24px' }} className="flex flex-col flex-1">
-        <div className="flex items-center gap-2 mb-3">
-          <span className={`badge ${isArticle ? 'badge-accent' : 'badge-cyan'}`}>
-            {isArticle ? 'Guide' : 'Product'}
-          </span>
+      <div style={{ padding: '20px 24px 28px' }}>
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          {product.categories && (
+            <span className="text-xs capitalize" style={{ color: 'var(--color-text-tertiary)' }}>
+              {product.categories.name}
+            </span>
+          )}
+          {product.timing && (
+            <>
+              <span className="text-xs" style={{ color: 'var(--color-text-tertiary)' }}>&middot;</span>
+              <span className="badge badge-accent capitalize text-[10px]">{product.timing}</span>
+            </>
+          )}
         </div>
         <h3
-          className="text-lg font-semibold mb-1.5 transition-colors"
-          style={{ color: 'var(--color-text)', letterSpacing: '-0.02em' }}
+          className="text-base font-semibold mb-1.5 line-clamp-2 transition-colors group-hover:opacity-80"
+          style={{ color: 'var(--color-text)', letterSpacing: '-0.01em' }}
         >
-          {tile.title}
+          {product.name}
         </h3>
-        <p className="text-sm leading-relaxed flex-1" style={{ color: 'var(--color-text-secondary)' }}>
-          {tile.description}
+        <p className="text-sm line-clamp-2 mb-3" style={{ color: 'var(--color-text-secondary)' }}>
+          {product.short_description}
         </p>
-        <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold gradient-text">
-          Explore
-          <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
-        </span>
+        <div className="flex items-center justify-between">
+          {product.price_text && (
+            <span className="text-sm font-semibold gradient-text">
+              {product.price_text}
+            </span>
+          )}
+          {product.strength && (
+            <span className="text-xs capitalize" style={{ color: 'var(--color-text-tertiary)' }}>
+              {product.strength}
+            </span>
+          )}
+        </div>
       </div>
     </Link>
   )
 }
 
+function ArticleCard({ article }: { article: RSSItem }) {
+  function stripHtml(html: string): string {
+    const doc = new DOMParser().parseFromString(html, 'text/html')
+    return doc.body.textContent || ''
+  }
+
+  function formatDate(dateString: string) {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffMs = now.getTime() - date.getTime()
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+    const diffDays = Math.floor(diffHours / 24)
+
+    if (diffHours < 1) return 'Just now'
+    if (diffHours < 24) return `${diffHours}h ago`
+    if (diffDays < 7) return `${diffDays}d ago`
+    return date.toLocaleDateString()
+  }
+
+  return (
+    <a
+      href={article.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="card group cursor-pointer"
+    >
+      <div
+        className="aspect-video overflow-hidden relative"
+        style={{ background: 'var(--color-bg-secondary)', borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0' }}
+      >
+        {article.image_url ? (
+          <img
+            src={article.image_url}
+            alt={article.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            onError={(e) => { e.currentTarget.style.display = 'none' }}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <svg className="w-10 h-10 opacity-15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+            </svg>
+          </div>
+        )}
+      </div>
+      <div style={{ padding: '20px 24px 28px' }}>
+        <div className="flex items-center gap-2 text-xs mb-3" style={{ color: 'var(--color-text-tertiary)' }}>
+          <span style={{ color: 'var(--color-accent)' }}>{article.rss_sources.name}</span>
+          <span>&middot;</span>
+          <span>{formatDate(article.published_at)}</span>
+        </div>
+        <h3
+          className="text-base font-semibold line-clamp-2 mb-2 transition-colors group-hover:opacity-80"
+          style={{ color: 'var(--color-text)', letterSpacing: '-0.01em', lineHeight: 1.35 }}
+        >
+          {article.title}
+        </h3>
+        {article.summary && (
+          <p className="text-sm line-clamp-2" style={{ color: 'var(--color-text-secondary)' }}>
+            {stripHtml(article.summary)}
+          </p>
+        )}
+      </div>
+    </a>
+  )
+}
+
 export default function HomePage() {
   useSEO()
+
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([])
+  const [latestArticles, setLatestArticles] = useState<RSSItem[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchHomeData() {
+      try {
+        const [productsRes, articlesRes] = await Promise.all([
+          fetch(`${API_URL}/products?limit=4`),
+          fetch(`${API_URL}/rss/items?limit=6`)
+        ])
+
+        const productsData = await productsRes.json()
+        const articlesData = await articlesRes.json()
+
+        if (productsData.status === 'ok') {
+          const featured = productsData.data.filter((p: Product) => p.is_featured).slice(0, 4)
+          setFeaturedProducts(featured.length > 0 ? featured : productsData.data.slice(0, 4))
+        }
+
+        if (articlesData.status === 'ok') {
+          setLatestArticles(articlesData.data.slice(0, 6))
+        }
+      } catch (err) {
+        console.error('Failed to fetch home data:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchHomeData()
+  }, [])
 
   return (
     <div>
@@ -174,92 +267,82 @@ export default function HomePage() {
       <section style={{ padding: '64px 0' }}>
         <div className="container">
           <div className="text-center mb-10">
-            <h2 className="section-title mb-3">Curated for You</h2>
+            <h2 className="section-title mb-3">Featured Products</h2>
             <p className="section-subtitle mx-auto" style={{ maxWidth: '480px' }}>
-              Handpicked products and reads based on what people love right now.
+              Handpicked products based on what people love right now.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {spotlightTiles.map(tile => (
-              <SpotlightCard key={tile.title} tile={tile} />
-            ))}
-          </div>
-
-          <div className="text-center mt-8">
-            <Link
-              to="/products"
-              className="text-sm font-semibold transition-opacity hover:opacity-70 inline-flex items-center gap-1"
-              style={{ color: 'var(--color-accent)' }}
-            >
-              View all products &rarr;
-            </Link>
-          </div>
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <div
+                className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
+                style={{ borderColor: 'var(--color-border-strong)', borderTopColor: 'transparent' }}
+              />
+            </div>
+          ) : featuredProducts.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                {featuredProducts.map(product => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+              <div className="text-center mt-8">
+                <Link
+                  to="/products"
+                  className="text-sm font-semibold transition-opacity hover:opacity-70 inline-flex items-center gap-1"
+                  style={{ color: 'var(--color-accent)' }}
+                >
+                  View all products &rarr;
+                </Link>
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-12">
+              <p style={{ color: 'var(--color-text-tertiary)' }}>No products available yet.</p>
+            </div>
+          )}
         </div>
       </section>
 
       <section style={{ padding: '64px 0', background: 'var(--color-bg-secondary)' }}>
         <div className="container">
           <div className="text-center mb-10">
-            <h2 className="section-title mb-3">Learn &amp; Discover</h2>
+            <h2 className="section-title mb-3">Latest Reads</h2>
             <p className="section-subtitle mx-auto" style={{ maxWidth: '500px' }}>
-              Guides, culture, and everything you need to make informed choices.
+              Cannabis culture, wellness, and lifestyle articles curated for you.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            {guides.map(item => (
-              <article key={item.title} className="card" style={{ padding: '28px 28px 24px' }}>
-                <h3
-                  className="text-lg font-semibold mb-3"
-                  style={{ color: 'var(--color-text)', letterSpacing: '-0.02em' }}
-                >
-                  {item.title}
-                </h3>
-                <p className="text-sm leading-relaxed mb-5" style={{ color: 'var(--color-text-secondary)' }}>
-                  {item.excerpt}
-                </p>
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <div
+                className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
+                style={{ borderColor: 'var(--color-border-strong)', borderTopColor: 'transparent' }}
+              />
+            </div>
+          ) : latestArticles.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {latestArticles.map(article => (
+                  <ArticleCard key={article.id} article={article} />
+                ))}
+              </div>
+              <div className="text-center mt-8">
                 <Link
                   to="/latest"
-                  className="text-sm font-semibold transition-opacity hover:opacity-70"
+                  className="text-sm font-semibold transition-opacity hover:opacity-70 inline-flex items-center gap-1"
                   style={{ color: 'var(--color-accent)' }}
                 >
-                  Read more &rarr;
+                  View all articles &rarr;
                 </Link>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section style={{ padding: '64px 0' }}>
-        <div className="container">
-          <div
-            className="rounded-3xl text-center relative overflow-hidden"
-            style={{
-              padding: '56px 32px',
-              background: 'linear-gradient(135deg, rgba(124,58,237,0.08), rgba(6,182,212,0.08), rgba(34,197,94,0.05))',
-              border: '1px solid var(--color-border)',
-            }}
-          >
-            <h2
-              className="gradient-text mb-4"
-              style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: 700, letterSpacing: '-0.03em' }}
-            >
-              Ready to explore?
-            </h2>
-            <p className="mb-8 mx-auto" style={{ color: 'var(--color-text-secondary)', maxWidth: '440px' }}>
-              Browse our curated product menu or dive into guides and culture reads.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/menu" className="btn-primary">
-                View Menu
-              </Link>
-              <Link to="/latest" className="btn-secondary">
-                Latest Reads
-              </Link>
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-12">
+              <p style={{ color: 'var(--color-text-tertiary)' }}>No articles available yet.</p>
             </div>
-          </div>
+          )}
         </div>
       </section>
     </div>
