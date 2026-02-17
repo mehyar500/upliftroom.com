@@ -27,14 +27,20 @@ export default function LatestPage() {
   async function fetchRSSItems() {
     try {
       const response = await fetch(`${API_URL}/rss/items?limit=30`)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+      }
+      
       const data = await response.json()
       
       if (data.status === 'ok') {
-        setItems(data.data)
+        setItems(data.data || [])
       } else {
-        setError('Failed to load news')
+        setError(data.message || 'Failed to load news')
       }
     } catch (err) {
+      console.error('RSS fetch error:', err)
       setError(err instanceof Error ? err.message : 'Failed to load news')
     } finally {
       setLoading(false)
