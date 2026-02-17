@@ -54,6 +54,19 @@ export async function getRSSItems(request: Request, env: Env): Promise<Response>
 export async function fetchRSS(env: Env): Promise<Response> {
   const supabase = getSupabaseClient(env)
   
+  // Clean up old items (older than 30 days)
+  const thirtyDaysAgo = new Date()
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+  
+  const { error: cleanupError } = await supabase
+    .from('rss_items')
+    .delete()
+    .lt('published_at', thirtyDaysAgo.toISOString())
+  
+  if (cleanupError) {
+    console.error('Failed to cleanup old RSS items:', cleanupError)
+  }
+  
   // Get active sources that need updating
   const { data: sources, error: sourcesError } = await supabase
     .from('rss_sources')

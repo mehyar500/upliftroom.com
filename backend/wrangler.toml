@@ -6,6 +6,10 @@ workers_dev = true
 [vars]
 ENVIRONMENT = "production"
 
+# Cron trigger for RSS fetching (every 6 hours)
+[triggers]
+crons = ["0 */6 * * *"]
+
 # Secrets (set via `wrangler secret put`):
 # SUPABASE_URL
 # SUPABASE_SERVICE_ROLE_KEY
