@@ -23,7 +23,7 @@ const spotlightTiles: Tile[] = [
     type: 'product',
   },
   {
-    title: "What's Trending Today",
+    title: "What's Trending",
     description: 'Fresh reads on cannabis culture, wellness, and design.',
     to: '/latest',
     type: 'article',
@@ -35,26 +35,26 @@ const spotlightTiles: Tile[] = [
     type: 'product',
   },
   {
-    title: 'How to Pick Your Profile',
-    description: 'A quick guide to matching product profile with your vibe.',
+    title: 'Find Your Profile',
+    description: 'Match your vibe to the right product profile.',
     to: '/latest',
     type: 'article',
     span: 'md:col-span-2',
   },
 ]
 
-const articleHighlights = [
+const guides = [
   {
-    title: 'Beginner-Friendly Product Types',
-    excerpt: 'Understand the differences between flower, vapes, edibles, and concentrates.',
+    title: 'Know Your Product Types',
+    excerpt: 'Flower, vapes, edibles, concentrates \u2014 understand each format and what to expect.',
   },
   {
-    title: 'Designing a Better Session',
-    excerpt: 'Simple rituals, playlists, and pairings for a premium at-home setup.',
+    title: 'Session Design 101',
+    excerpt: 'Rituals, playlists, and pairings for a premium at-home experience.',
   },
   {
     title: 'Culture Snapshot',
-    excerpt: 'The creators, trends, and communities defining modern cannabis lifestyle.',
+    excerpt: 'The creators, trends, and communities shaping modern cannabis lifestyle.',
   },
 ]
 
@@ -64,11 +64,11 @@ function SpotlightCard({ tile }: { tile: Tile }) {
   return (
     <Link
       to={tile.to}
-      className={`card group relative p-6 md:p-8 flex flex-col justify-between ${tile.span ?? ''}`}
+      className={`card group relative p-6 md:p-8 flex flex-col justify-between min-h-[200px] ${tile.span ?? ''}`}
     >
       <div>
         <span className={`badge mb-4 ${isArticle ? 'badge-accent' : 'badge-cyan'}`}>
-          {isArticle ? 'Article' : 'Product'}
+          {isArticle ? 'Guide' : 'Product'}
         </span>
         <h3
           className="text-xl font-semibold mb-2 transition-colors"
@@ -130,20 +130,20 @@ export default function HomePage() {
             style={{
               fontSize: 'clamp(1.05rem, 2.5vw, 1.375rem)',
               color: 'var(--color-text-secondary)',
-              maxWidth: '520px',
+              maxWidth: '540px',
               lineHeight: 1.6,
               letterSpacing: '-0.01em',
             }}
           >
-            Products + stories, mixed for a modern cannabis lifestyle.
+            Explore cannabis culture, learn about products, and find your vibe.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-10">
             <Link to="/products" className="btn-primary w-full sm:w-auto">
-              Shop the Edit
+              Explore Products
             </Link>
             <Link to="/latest" className="btn-secondary w-full sm:w-auto">
-              Read Latest
+              Read &amp; Learn
             </Link>
           </div>
         </div>
@@ -152,7 +152,7 @@ export default function HomePage() {
       <section className="page-section">
         <div className="container">
           <div className="flex items-end justify-between gap-4 mb-8">
-            <h2 className="section-title">Featured Mix</h2>
+            <h2 className="section-title">Curated for You</h2>
             <Link
               to="/latest"
               className="text-sm font-semibold transition-opacity hover:opacity-70 hidden sm:block"
@@ -172,13 +172,13 @@ export default function HomePage() {
 
       <section className="page-section" style={{ background: 'var(--color-bg-secondary)' }}>
         <div className="container">
-          <h2 className="section-title text-center mb-4">From the Blog</h2>
-          <p className="section-subtitle text-center mb-10 mx-auto" style={{ maxWidth: '480px' }}>
-            Explore guides, culture, and lifestyle reads.
+          <h2 className="section-title text-center mb-4">Learn &amp; Discover</h2>
+          <p className="section-subtitle text-center mb-10 mx-auto" style={{ maxWidth: '500px' }}>
+            Guides, culture, and everything you need to make informed choices.
           </p>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            {articleHighlights.map(item => (
+            {guides.map(item => (
               <article key={item.title} className="card p-6 md:p-8">
                 <h3
                   className="text-lg font-semibold mb-3"
@@ -217,12 +217,17 @@ export default function HomePage() {
             >
               Ready to explore?
             </h2>
-            <p className="mb-8 mx-auto" style={{ color: 'var(--color-text-secondary)', maxWidth: '420px' }}>
-              Discover curated products and stories designed for your lifestyle.
+            <p className="mb-8 mx-auto" style={{ color: 'var(--color-text-secondary)', maxWidth: '440px' }}>
+              Browse our curated product menu or dive into guides and culture reads.
             </p>
-            <Link to="/products" className="btn-primary">
-              Browse Products
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/menu" className="btn-primary">
+                View Menu
+              </Link>
+              <Link to="/latest" className="btn-secondary">
+                Latest Reads
+              </Link>
+            </div>
           </div>
         </div>
       </section>

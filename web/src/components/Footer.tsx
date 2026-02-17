@@ -14,7 +14,7 @@ export default function Footer() {
               <span className="text-lg font-bold tracking-tight gradient-text">UpliftRoom</span>
             </Link>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-tertiary)' }}>
-              Your lifestyle destination for premium cannabis products and culture.
+              Cannabis education, curated products, and lifestyle culture.
             </p>
           </div>
 

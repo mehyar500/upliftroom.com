@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import ArticleReader from '../components/ArticleReader'
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://api.upliftroom.com'
 
@@ -7,6 +8,7 @@ interface RSSItem {
   title: string
   link: string
   summary: string | null
+  content: string | null
   image_url: string | null
   published_at: string
   rss_sources: {
@@ -19,6 +21,7 @@ export default function LatestPage() {
   const [items, setItems] = useState<RSSItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [activeArticle, setActiveArticle] = useState<RSSItem | null>(null)
 
   useEffect(() => {
     fetchRSSItems()
@@ -32,13 +35,18 @@ export default function LatestPage() {
       if (data.status === 'ok') {
         setItems(data.data)
       } else {
-        setError('Failed to load news')
+        setError('Failed to load articles')
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load news')
+      setError(err instanceof Error ? err.message : 'Failed to load articles')
     } finally {
       setLoading(false)
     }
+  }
+
+  function stripHtml(html: string): string {
+    const doc = new DOMParser().parseFromString(html, 'text/html')
+    return doc.body.textContent || ''
   }
 
   function formatDate(dateString: string) {
@@ -54,6 +62,13 @@ export default function LatestPage() {
     return date.toLocaleDateString()
   }
 
+  function handleArticleClick(e: React.MouseEvent, item: RSSItem) {
+    if (item.content && item.content.trim().length > 100) {
+      e.preventDefault()
+      setActiveArticle(item)
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
@@ -62,7 +77,7 @@ export default function LatestPage() {
             className="w-8 h-8 rounded-full border-2 border-t-transparent animate-spin"
             style={{ borderColor: 'var(--color-border-strong)', borderTopColor: 'transparent' }}
           />
-          <span className="text-sm" style={{ color: 'var(--color-text-tertiary)' }}>Loading latest news...</span>
+          <span className="text-sm" style={{ color: 'var(--color-text-tertiary)' }}>Loading articles...</span>
         </div>
       </div>
     )
@@ -71,44 +86,117 @@ export default function LatestPage() {
   if (error) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
-        <p className="text-red-500">{error}</p>
+        <div className="text-center">
+          <p className="text-red-500 mb-4">{error}</p>
+          <button onClick={() => { setError(null); setLoading(true); fetchRSSItems() }} className="btn-secondary text-sm">
+            Try Again
+          </button>
+        </div>
       </div>
     )
   }
 
+  const featured = items[0]
+  const rest = items.slice(1)
+
   return (
     <div className="page-section">
       <div className="container">
-        <div className="text-center mb-10">
-          <h1 className="section-title mb-3">Latest News</h1>
-          <p className="section-subtitle mx-auto" style={{ maxWidth: '480px' }}>
-            Stay updated with cannabis culture and industry news
+        <div className="text-center mb-12">
+          <h1 className="section-title mb-3">Latest Reads</h1>
+          <p className="section-subtitle mx-auto" style={{ maxWidth: '520px' }}>
+            Cannabis culture, industry news, and lifestyle reads — curated for you.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {items.map((item) => (
+        {featured && (
+          <a
+            href={featured.link}
+            target={featured.content && featured.content.trim().length > 100 ? undefined : '_blank'}
+            rel="noopener noreferrer"
+            onClick={(e) => handleArticleClick(e, featured)}
+            className="card group mb-8 grid grid-cols-1 md:grid-cols-2 overflow-hidden cursor-pointer"
+          >
+            {featured.image_url ? (
+              <div className="aspect-video md:aspect-auto overflow-hidden" style={{ background: 'var(--color-bg-secondary)', minHeight: '280px' }}>
+                <img
+                  src={featured.image_url}
+                  alt={featured.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  onError={(e) => { e.currentTarget.style.display = 'none' }}
+                />
+              </div>
+            ) : (
+              <div className="hidden md:flex items-center justify-center" style={{ background: 'var(--color-bg-secondary)', minHeight: '280px' }}>
+                <svg className="w-16 h-16 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                </svg>
+              </div>
+            )}
+            <div className="p-6 md:p-10 flex flex-col justify-center">
+              <div className="flex items-center gap-2 text-xs mb-4" style={{ color: 'var(--color-text-tertiary)' }}>
+                <span className="badge badge-accent">{featured.rss_sources.name}</span>
+                <span>&middot;</span>
+                <span>{formatDate(featured.published_at)}</span>
+              </div>
+              <h2
+                className="text-xl md:text-2xl font-bold mb-3 transition-colors group-hover:opacity-80"
+                style={{ color: 'var(--color-text)', letterSpacing: '-0.02em', lineHeight: 1.25 }}
+              >
+                {featured.title}
+              </h2>
+              {featured.summary && (
+                <p className="text-sm leading-relaxed line-clamp-3" style={{ color: 'var(--color-text-secondary)' }}>
+                  {stripHtml(featured.summary)}
+                </p>
+              )}
+              <span className="mt-4 text-sm font-semibold gradient-text inline-flex items-center gap-2">
+                {featured.content && featured.content.trim().length > 100 ? 'Read article' : 'View on source'} <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
+              </span>
+            </div>
+          </a>
+        )}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {rest.map((item) => (
             <a
               key={item.id}
               href={item.link}
-              target="_blank"
+              target={item.content && item.content.trim().length > 100 ? undefined : '_blank'}
               rel="noopener noreferrer"
-              className="card group"
+              onClick={(e) => handleArticleClick(e, item)}
+              className="card group cursor-pointer"
             >
-              {item.image_url && (
-                <div className="aspect-video overflow-hidden" style={{ background: 'var(--color-bg-secondary)' }}>
+              <div
+                className="aspect-video overflow-hidden relative"
+                style={{ background: 'var(--color-bg-secondary)' }}
+              >
+                {item.image_url ? (
                   <img
                     src={item.image_url}
                     alt={item.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     onError={(e) => {
+                      const parent = e.currentTarget.parentElement
                       e.currentTarget.style.display = 'none'
+                      if (parent) {
+                        const placeholder = document.createElement('div')
+                        placeholder.className = 'w-full h-full flex items-center justify-center'
+                        placeholder.innerHTML = '<svg class="w-10 h-10 opacity-15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>'
+                        parent.appendChild(placeholder)
+                      }
                     }}
                   />
-                </div>
-              )}
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <svg className="w-10 h-10 opacity-15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                    </svg>
+                  </div>
+                )}
+              </div>
               
-              <div className="p-5 md:p-6">
+              <div className="p-5">
                 <div className="flex items-center gap-2 text-xs mb-3" style={{ color: 'var(--color-text-tertiary)' }}>
                   <span style={{ color: 'var(--color-accent)' }}>{item.rss_sources.name}</span>
                   <span>&middot;</span>
@@ -117,14 +205,14 @@ export default function LatestPage() {
                 
                 <h3
                   className="text-base font-semibold line-clamp-2 mb-2 transition-colors group-hover:opacity-80"
-                  style={{ color: 'var(--color-text)', letterSpacing: '-0.01em' }}
+                  style={{ color: 'var(--color-text)', letterSpacing: '-0.01em', lineHeight: 1.35 }}
                 >
                   {item.title}
                 </h3>
                 
                 {item.summary && (
-                  <p className="text-sm line-clamp-3" style={{ color: 'var(--color-text-secondary)' }}>
-                    {item.summary}
+                  <p className="text-sm line-clamp-2" style={{ color: 'var(--color-text-secondary)' }}>
+                    {stripHtml(item.summary)}
                   </p>
                 )}
               </div>
@@ -134,10 +222,23 @@ export default function LatestPage() {
 
         {items.length === 0 && (
           <div className="text-center py-16">
-            <p style={{ color: 'var(--color-text-tertiary)' }}>No news items available yet</p>
+            <p style={{ color: 'var(--color-text-tertiary)' }}>No articles available yet. Check back soon.</p>
           </div>
         )}
       </div>
+
+      {activeArticle && (
+        <ArticleReader
+          title={activeArticle.title}
+          source={activeArticle.rss_sources.name}
+          sourceUrl={activeArticle.rss_sources.homepage_url}
+          date={formatDate(activeArticle.published_at)}
+          imageUrl={activeArticle.image_url}
+          content={activeArticle.content || activeArticle.summary || ''}
+          link={activeArticle.link}
+          onClose={() => setActiveArticle(null)}
+        />
+      )}
     </div>
   )
 }

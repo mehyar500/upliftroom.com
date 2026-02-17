@@ -51,7 +51,7 @@ export default function AboutPage() {
           </div>
           <h1 className="section-title mb-3">About UpliftRoom</h1>
           <p className="section-subtitle mx-auto" style={{ maxWidth: '480px' }}>
-            Products + stories, mixed for a modern cannabis lifestyle.
+            Cannabis education, curated products, and lifestyle culture.
           </p>
         </div>
 
