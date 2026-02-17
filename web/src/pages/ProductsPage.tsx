@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useSEO } from '../hooks/useSEO'
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://api.upliftroom.com'
 
@@ -142,6 +143,12 @@ function ProductDetailModal({ product, onClose }: { product: Product; onClose: (
 }
 
 export default function ProductsPage() {
+  useSEO({
+    title: 'Products',
+    description: 'Explore our curated selection of cannabis products. Learn about each product, its profile, and find what fits your vibe.',
+    canonical: 'https://upliftroom.com/products',
+  })
+
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

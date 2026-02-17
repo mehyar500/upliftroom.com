@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useSEO } from '../hooks/useSEO'
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://api.upliftroom.com'
 
@@ -14,6 +15,12 @@ interface Product {
 }
 
 export default function MenuPage() {
+  useSEO({
+    title: 'Menu',
+    description: 'Browse the UpliftRoom menu. View cannabis products by category with details on profile, intensity, and more.',
+    canonical: 'https://upliftroom.com/menu',
+  })
+
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useSEO } from '../hooks/useSEO'
 
 type Tile = {
   title: string
@@ -89,6 +90,8 @@ function SpotlightCard({ tile }: { tile: Tile }) {
 }
 
 export default function HomePage() {
+  useSEO()
+
   return (
     <div>
       <section className="relative overflow-hidden page-section" style={{ paddingTop: '100px', paddingBottom: '100px' }}>

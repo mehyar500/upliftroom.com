@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import ArticleReader from '../components/ArticleReader'
+import { useSEO } from '../hooks/useSEO'
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://api.upliftroom.com'
 
@@ -18,6 +19,12 @@ interface RSSItem {
 }
 
 export default function LatestPage() {
+  useSEO({
+    title: 'Latest',
+    description: 'Stay up to date with the latest cannabis news, culture, and insights curated from trusted sources.',
+    canonical: 'https://upliftroom.com/latest',
+  })
+
   const [items, setItems] = useState<RSSItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

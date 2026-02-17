@@ -1,4 +1,12 @@
+import { useSEO } from '../hooks/useSEO'
+
 export default function PrivacyPage() {
+  useSEO({
+    title: 'Privacy Policy',
+    description: 'UpliftRoom privacy policy. Learn how we collect, use, and protect your personal information.',
+    canonical: 'https://upliftroom.com/privacy',
+  })
+
   const sections = [
     {
       title: 'Introduction',

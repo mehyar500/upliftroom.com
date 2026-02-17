@@ -1,4 +1,12 @@
+import { useSEO } from '../hooks/useSEO'
+
 export default function AboutPage() {
+  useSEO({
+    title: 'About',
+    description: 'Learn about UpliftRoom — a modern cannabis lifestyle and education platform focused on culture, community, and curated product information.',
+    canonical: 'https://upliftroom.com/about',
+  })
+
   const sections = [
     {
       title: 'Our Mission',
