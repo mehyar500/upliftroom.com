@@ -21,26 +21,33 @@ export async function getRSSItems(request: Request, env: Env): Promise<Response>
   
   const supabase = getSupabaseClient(env)
   
-  let query = supabase
-    .from('rss_items')
-    .select('*, rss_sources(name, homepage_url, category)')
-    .order('published_at', { ascending: false })
-    .limit(limit)
-  
-  if (category) {
-    query = query.eq('rss_sources.category', category)
-  }
-  
-  const { data, error } = await query
-  
-  if (error) {
+  try {
+    let query = supabase
+      .from('rss_items')
+      .select('*, rss_sources!inner(name, homepage_url, category)')
+      .order('published_at', { ascending: false })
+      .limit(limit)
+    
+    if (category) {
+      query = query.eq('rss_sources.category', category)
+    }
+    
+    const { data, error } = await query
+    
+    if (error) {
+      return jsonResponse(
+        { status: 'error', message: 'Failed to fetch RSS items', detail: error.message },
+        500
+      )
+    }
+    
+    return jsonResponse({ status: 'ok', data: data || [] })
+  } catch (err) {
     return jsonResponse(
-      { status: 'error', message: 'Failed to fetch RSS items', detail: error.message },
+      { status: 'error', message: 'Failed to fetch RSS items', detail: err instanceof Error ? err.message : 'Unknown error' },
       500
     )
   }
-  
-  return jsonResponse({ status: 'ok', data })
 }
 
 // POST /admin/rss/fetch - Manually trigger RSS fetch (admin only)

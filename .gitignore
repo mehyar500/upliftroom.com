@@ -123,3 +123,7 @@ dist
 
 # Supabase
 supabase/.temp
+
+# Wrangler (Cloudflare Workers)
+.wrangler/
+.dev.vars
