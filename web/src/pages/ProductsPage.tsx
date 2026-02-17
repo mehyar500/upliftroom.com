@@ -232,7 +232,7 @@ export default function ProductsPage() {
               >
                 <div
                   className="aspect-square overflow-hidden relative"
-                  style={{ background: 'var(--color-bg-secondary)' }}
+                  style={{ background: 'var(--color-bg-secondary)', borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0' }}
                 >
                   {product.image_cover_path ? (
                     <img
@@ -254,7 +254,7 @@ export default function ProductsPage() {
                   )}
                 </div>
 
-                <div className="p-6">
+                <div className="px-6 pt-5 pb-7">
                   <div className="flex items-center gap-2 mb-2 flex-wrap">
                     {product.categories && (
                       <span className="text-xs capitalize" style={{ color: 'var(--color-text-tertiary)' }}>

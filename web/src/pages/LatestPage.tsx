@@ -118,7 +118,7 @@ export default function LatestPage() {
             className="card group mb-8 grid grid-cols-1 md:grid-cols-2 overflow-hidden cursor-pointer"
           >
             {featured.image_url ? (
-              <div className="aspect-video md:aspect-auto overflow-hidden" style={{ background: 'var(--color-bg-secondary)', minHeight: '280px' }}>
+              <div className="aspect-video md:aspect-auto overflow-hidden" style={{ background: 'var(--color-bg-secondary)', minHeight: '280px', borderRadius: 'var(--radius-lg) 0 0 var(--radius-lg)' }}>
                 <img
                   src={featured.image_url}
                   alt={featured.title}
@@ -169,7 +169,7 @@ export default function LatestPage() {
             >
               <div
                 className="aspect-video overflow-hidden relative"
-                style={{ background: 'var(--color-bg-secondary)' }}
+                style={{ background: 'var(--color-bg-secondary)', borderRadius: 'var(--radius-lg) var(--radius-lg) 0 0' }}
               >
                 {item.image_url ? (
                   <img
