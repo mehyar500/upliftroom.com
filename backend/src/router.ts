@@ -13,6 +13,8 @@ import {
 } from './routes/products'
 import { uploadImage, deleteImage } from './routes/upload'
 import { getRSSItems, fetchRSS } from './routes/rss'
+import { signupNewsletter } from './routes/newsletter'
+import { listNewsletterSignups, deleteNewsletterSignup } from './routes/admin-newsletter'
 
 export async function handleRequest(request: Request, env: Env): Promise<Response> {
   // Handle CORS preflight
@@ -89,6 +91,22 @@ export async function handleRequest(request: Request, env: Env): Promise<Respons
   // Admin RSS - Fetch
   if (path === '/admin/rss/fetch' && request.method === 'POST') {
     return fetchRSS(env)
+  }
+
+  // Newsletter signup - Public
+  if (path === '/newsletter/signup' && request.method === 'POST') {
+    return signupNewsletter(request, env)
+  }
+
+  // Admin Newsletter - List signups
+  if (path === '/admin/newsletter/signups' && request.method === 'GET') {
+    return listNewsletterSignups(request, env)
+  }
+
+  // Admin Newsletter - Delete signup
+  const newsletterDeleteMatch = path.match(/^\/admin\/newsletter\/signups\/([^/]+)$/)
+  if (newsletterDeleteMatch && request.method === 'DELETE') {
+    return deleteNewsletterSignup(newsletterDeleteMatch[1], env)
   }
 
   return jsonResponse({ error: 'Not found', path }, 404)
