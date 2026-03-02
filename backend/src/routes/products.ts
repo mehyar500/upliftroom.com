@@ -153,20 +153,23 @@ export async function updateProduct(
     return jsonResponse({ status: 'error', message: 'Invalid JSON body' }, 400)
   }
   
-  // Validation for publishing
-  if (payload.is_active === true) {
-    // Check required fields for publishing
-    const supabase = getSupabaseClient(env)
-    const { data: existing } = await supabase
-      .from('products')
-      .select('image_cover_path, profile, intensity, short_description')
-      .eq('id', id)
-      .single()
-    
-    if (!existing) {
-      return jsonResponse({ status: 'error', message: 'Product not found' }, 404)
-    }
-    
+  // Validation for publishing - only validate when explicitly setting is_active to true
+  // (not when product is already active and we're just updating other fields)
+  const supabase = getSupabaseClient(env)
+  
+  // Get existing product to check current state
+  const { data: existing } = await supabase
+    .from('products')
+    .select('is_active, image_cover_path, profile, intensity, short_description')
+    .eq('id', id)
+    .single()
+  
+  if (!existing) {
+    return jsonResponse({ status: 'error', message: 'Product not found' }, 404)
+  }
+  
+  // Only validate required fields if we're trying to activate an inactive product
+  if (payload.is_active === true && existing.is_active === false) {
     const errors: string[] = []
     
     if (!existing.image_cover_path && !payload.image_cover_path) {
@@ -194,7 +197,13 @@ export async function updateProduct(
     }
   }
   
-  const supabase = getSupabaseClient(env)
+  // Validate short_description length if it's being updated
+  if (payload.short_description && payload.short_description.length > 160) {
+    return jsonResponse(
+      { status: 'error', message: 'short_description must be 160 characters or less' },
+      400
+    )
+  }
   
   const { data, error } = await supabase
     .from('products')
