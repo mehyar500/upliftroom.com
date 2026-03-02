@@ -13,6 +13,7 @@ interface Product {
   profile: string | null
   intensity: string | null
   price_text: string | null
+  base_price: number | null
   image_cover_path: string | null
   image_gallery_paths: string[] | null
   is_featured: boolean
@@ -36,9 +37,13 @@ export default function ProductDetailPage() {
   const [copySuccess, setCopySuccess] = useState(false)
 
   useSEO({
-    title: product ? `${product.name} - Products` : 'Product',
+    title: product ? product.name : 'Product',
     description: product?.short_description || 'View product details',
     canonical: `https://upliftroom.com/products/${slug}`,
+    ogImage: product?.image_cover_path || undefined,
+    ogType: 'product',
+    productPrice: product?.base_price?.toString(),
+    productAvailability: product?.out_of_stock ? 'out of stock' : 'in stock',
   })
 
   const fetchProduct = useCallback(async () => {

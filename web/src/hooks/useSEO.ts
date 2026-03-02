@@ -7,6 +7,8 @@ interface SEOProps {
   canonical?: string
   ogImage?: string
   ogType?: string
+  productPrice?: string
+  productAvailability?: 'in stock' | 'out of stock'
 }
 
 const SITE_NAME = 'UpliftRoom'
@@ -42,6 +44,8 @@ export function useSEO({
   canonical,
   ogImage = DEFAULT_OG_IMAGE,
   ogType = 'website',
+  productPrice,
+  productAvailability,
 }: SEOProps = {}) {
   useEffect(() => {
     const fullTitle = title ? `${title} | ${SITE_NAME}` : `${SITE_NAME} — Cannabis Culture & Education`
@@ -57,11 +61,22 @@ export function useSEO({
     setMeta('og:site_name', SITE_NAME, 'property')
     setMeta('og:url', canonical || `${BASE_URL}${window.location.pathname}`, 'property')
 
+    // Product-specific OG tags
+    if (ogType === 'product') {
+      if (productPrice) {
+        setMeta('product:price:amount', productPrice, 'property')
+        setMeta('product:price:currency', 'USD', 'property')
+      }
+      if (productAvailability) {
+        setMeta('product:availability', productAvailability, 'property')
+      }
+    }
+
     setMeta('twitter:card', 'summary_large_image')
     setMeta('twitter:title', fullTitle)
     setMeta('twitter:description', description)
     setMeta('twitter:image', ogImage)
 
     setCanonical(canonical || `${BASE_URL}${window.location.pathname}`)
-  }, [title, description, keywords, canonical, ogImage, ogType])
+  }, [title, description, keywords, canonical, ogImage, ogType, productPrice, productAvailability])
 }
