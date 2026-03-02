@@ -43,6 +43,7 @@ export interface Product {
   // Publishing
   is_active: boolean
   is_featured: boolean
+  out_of_stock: boolean
   sort_order: number
   
   // Timestamps
@@ -85,4 +86,5 @@ export interface CreateProductRequest {
 
 export interface UpdateProductRequest extends Partial<CreateProductRequest> {
   is_active?: boolean
+  out_of_stock?: boolean
 }

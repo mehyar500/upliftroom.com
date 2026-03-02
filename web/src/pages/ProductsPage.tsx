@@ -16,6 +16,7 @@ interface Product {
   image_cover_path: string | null
   image_gallery_paths: string[] | null
   is_featured: boolean
+  out_of_stock: boolean
   labels: string[] | null
   strength: string | null
   timing: string | null
@@ -24,122 +25,6 @@ interface Product {
     name: string
     slug: string
   } | null
-}
-
-function ProductDetailModal({ product, onClose }: { product: Product; onClose: () => void }) {
-  useEffect(() => {
-    document.body.style.overflow = 'hidden'
-    function handleKey(e: KeyboardEvent) { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', handleKey)
-    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', handleKey) }
-  }, [onClose])
-
-  return (
-    <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-y-auto"
-      style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}
-      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
-    >
-      <div
-        className="w-full max-w-[560px] rounded-3xl overflow-hidden animate-[slideUp_0.3s_ease-out] relative"
-        style={{ background: 'var(--color-bg-elevated)', boxShadow: '0 25px 60px rgba(0,0,0,0.3)' }}
-      >
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-20 w-8 h-8 flex items-center justify-center rounded-full transition-all hover:scale-110"
-          style={{ background: 'var(--color-bg-elevated)', color: 'var(--color-text-secondary)', boxShadow: 'var(--shadow-md)' }}
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-
-        <div
-          className="aspect-[16/9] overflow-hidden relative flex items-center justify-center"
-          style={{ background: 'var(--color-bg-secondary)' }}
-        >
-          {product.image_cover_path ? (
-            <img
-              src={product.image_cover_path}
-              alt={product.name}
-              className="w-full h-full object-cover"
-              onError={(e) => { e.currentTarget.style.display = 'none' }}
-            />
-          ) : (
-            <div className="flex flex-col items-center gap-3 opacity-30">
-              <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: 'var(--color-text-tertiary)' }}>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-              </svg>
-            </div>
-          )}
-        </div>
-
-        <div style={{ padding: '28px 32px 32px' }}>
-          <div className="flex items-center gap-2 mb-4 flex-wrap">
-            {product.categories && (
-              <span className="badge badge-cyan capitalize">{product.categories.name}</span>
-            )}
-            {product.profile && (
-              <span className="badge badge-accent capitalize">{product.profile}</span>
-            )}
-          </div>
-
-          <h1 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text)', letterSpacing: '-0.03em', lineHeight: 1.2 }}>
-            {product.name}
-          </h1>
-
-          {product.price_text && (
-            <p className="text-lg font-semibold mb-4 gradient-text">{product.price_text}</p>
-          )}
-
-          <p className="text-sm leading-relaxed mb-5" style={{ color: 'var(--color-text-secondary)' }}>
-            {product.short_description}
-          </p>
-
-          {(product.intensity || product.strength || product.timing) && (
-            <div className="flex flex-wrap gap-2 mb-5">
-              {product.intensity && <span className="pill text-xs capitalize">{product.intensity} Intensity</span>}
-              {product.strength && <span className="pill text-xs capitalize">{product.strength}</span>}
-              {product.timing && <span className="pill text-xs capitalize">{product.timing}</span>}
-            </div>
-          )}
-
-          {product.labels && product.labels.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-5">
-              {product.labels.map((label, i) => (
-                <span key={i} className="badge badge-cyan">{label}</span>
-              ))}
-            </div>
-          )}
-
-          {product.long_description_md && (
-            <div
-              className="text-sm leading-relaxed mb-5"
-              style={{ color: 'var(--color-text-secondary)' }}
-            >
-              {product.long_description_md.split('\n').map((line, i) => (
-                <p key={i} className="mb-2.5">{line}</p>
-              ))}
-            </div>
-          )}
-
-          {product.image_gallery_paths && product.image_gallery_paths.length > 0 && (
-            <div className="grid grid-cols-3 gap-2.5 mb-5">
-              {product.image_gallery_paths.map((img, i) => (
-                <div key={i} className="aspect-square rounded-xl overflow-hidden" style={{ background: 'var(--color-bg-secondary)' }}>
-                  <img src={img} alt={`${product.name} gallery ${i + 1}`} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-          )}
-
-          <p className="text-[11px] mt-5 pt-4" style={{ color: 'var(--color-text-tertiary)', borderTop: '1px solid var(--color-border)' }}>
-            Effects may vary by person. This product is for informational purposes only.
-          </p>
-        </div>
-      </div>
-    </div>
-  )
 }
 
 export default function ProductsPage() {
@@ -153,7 +38,6 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [activeProduct, setActiveProduct] = useState<Product | null>(null)
 
   useEffect(() => {
     fetchProducts()
@@ -246,10 +130,10 @@ export default function ProductsPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {products.map(product => (
-              <div
+              <Link
                 key={product.id}
+                to={`/products/${product.slug}`}
                 className="card group cursor-pointer"
-                onClick={() => setActiveProduct(product)}
               >
                 <div
                   className="aspect-square overflow-hidden relative"
@@ -271,6 +155,12 @@ export default function ProductsPage() {
                   {product.is_featured && (
                     <div className="absolute top-3 right-3 badge gradient-bg text-white text-[10px]" style={{ border: 'none' }}>
                       Featured
+                    </div>
+                  )}
+                  
+                  {product.out_of_stock && (
+                    <div className="absolute top-3 left-3 badge bg-red-600 text-white text-[10px]" style={{ border: 'none' }}>
+                      Out of Stock
                     </div>
                   )}
                 </div>
@@ -314,15 +204,11 @@ export default function ProductsPage() {
                     )}
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
       </div>
-
-      {activeProduct && (
-        <ProductDetailModal product={activeProduct} onClose={() => setActiveProduct(null)} />
-      )}
     </div>
   )
 }

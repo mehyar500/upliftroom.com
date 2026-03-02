@@ -32,6 +32,7 @@ interface ProductFormData {
   content_warnings: string
   is_active: boolean
   is_featured: boolean
+  out_of_stock: boolean
   sort_order: string
 }
 
@@ -73,6 +74,7 @@ export default function ProductForm({ productId, onSave, onCancel }: ProductForm
     content_warnings: '',
     is_active: false,
     is_featured: false,
+    out_of_stock: false,
     sort_order: '0',
   })
 
@@ -126,6 +128,7 @@ export default function ProductForm({ productId, onSave, onCancel }: ProductForm
           content_warnings: product.content_warnings?.join(', ') || '',
           is_active: product.is_active || false,
           is_featured: product.is_featured || false,
+          out_of_stock: product.out_of_stock || false,
           sort_order: product.sort_order?.toString() || '0',
         })
       }
@@ -181,6 +184,7 @@ export default function ProductForm({ productId, onSave, onCancel }: ProductForm
           : null,
         is_active: formData.is_active,
         is_featured: formData.is_featured,
+        out_of_stock: formData.out_of_stock,
         sort_order: parseInt(formData.sort_order) || 0,
       }
 
@@ -443,7 +447,7 @@ export default function ProductForm({ productId, onSave, onCancel }: ProductForm
           />
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-4 gap-4">
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -467,6 +471,19 @@ export default function ProductForm({ productId, onSave, onCancel }: ProductForm
             />
             <label htmlFor="is_featured" className="text-sm text-gray-300">
               Featured
+            </label>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="out_of_stock"
+              checked={formData.out_of_stock}
+              onChange={(e) => handleChange('out_of_stock', e.target.checked)}
+              className="rounded"
+            />
+            <label htmlFor="out_of_stock" className="text-sm text-gray-300">
+              Out of Stock
             </label>
           </div>
 
